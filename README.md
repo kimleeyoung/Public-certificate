@@ -6,3 +6,7 @@
 
 
 http://www.ysarang.com/UploadFiles/Board/Files/%EA%B3%B5%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%9C%20%EA%B0%B1%EC%8B%A0%20%EB%B0%A9%EB%B2%95(%EC%9D%98%EC%82%AC%EB%9E%91).pdf
+
+일요일 할일
+- 공인인증서 디자인 찾아보기
+- 공인인증서 디자인 만들어보기
