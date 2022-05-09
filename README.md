@@ -4,9 +4,4 @@
 - 인증서 자동로그인 위치 설정하기
 - 인증서 심평원 등록하기 
 
-
-http://www.ysarang.com/UploadFiles/Board/Files/%EA%B3%B5%EC%9D%B8%EC%9D%B8%EC%A6%9D%EC%84%9C%20%EA%B0%B1%EC%8B%A0%20%EB%B0%A9%EB%B2%95(%EC%9D%98%EC%82%AC%EB%9E%91).pdf
-
-일요일 할일
-- 공인인증서 디자인 찾아보기
-- 공인인증서 디자인 만들어보기
+![image](https://user-images.githubusercontent.com/65011438/167378303-b4eb2fde-797f-4791-896c-8055b3ff117b.png)
