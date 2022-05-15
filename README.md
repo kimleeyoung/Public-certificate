@@ -18,4 +18,3 @@
 ![image](https://user-images.githubusercontent.com/65011438/168021413-37029493-e45e-4b58-933b-a90e50e71831.png)
 
 
-나아진게 없오,.
