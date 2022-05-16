@@ -18,8 +18,4 @@
 ![image](https://user-images.githubusercontent.com/65011438/168021413-37029493-e45e-4b58-933b-a90e50e71831.png)
 
 
-새로운 메소드 만들기
-{
-  file_nm 가져와서 인증서 경로로 들어간 뒤 start_date, end_date 가져와서 
-  grid에 뿌려주기
-}
+![image](https://user-images.githubusercontent.com/65011438/168526428-2a42c193-86f0-4c1a-9374-55a559942f7c.png)
