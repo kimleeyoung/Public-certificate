@@ -31,10 +31,13 @@ namespace Mcc.Clinic.Common.D._POPUP
         #region - member variable -
         List<HospInfo> _hospInfo = new List<HospInfo>();
         HospInfo _selHosp = new HospInfo();
-        Status _status = Status.OLD;
+        Status _status = Status.OLD;        
         string startDate = string.Empty;
         string endDate = string.Empty;
         string _cbxFileNm = string.Empty;
+        string _loadFileNm = string.Empty;
+        bool _load = true;
+        bool _selectedRow = false;
         #endregion
 
         #region - constructor -
@@ -59,7 +62,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
             chkAutoCert.Click += ChkAutoCert_Click;
             cbxHosp.SelectedValueChanged += CbxHosp_SelectedValueChanged;
-            txtLoginPwd.EnabledChanged += TxtLoginPwd_EnabledChanged;            
+            txtLoginPwd.EnabledChanged += TxtLoginPwd_EnabledChanged;                        
         }
         #endregion
 
@@ -71,9 +74,10 @@ namespace Mcc.Clinic.Common.D._POPUP
             {
                 // To Do..
                 this.SetInitialize();
-                this.SetGridHeader();
+                this.SetGridHeader();                
+                
+                GetCert();
                 SetComboItem();
-                //GetCert();
             }
             catch (Exception ex)
             {
@@ -154,16 +158,12 @@ namespace Mcc.Clinic.Common.D._POPUP
                     endDate = cert.NotAfter.ToString("yyyy-MM-dd");
                     if (grdPcCert.Rows.Count > 0) dt = grdPcCert.DataSource as DataTable;
 
-                    dt.Rows.Add(fileNm[1].Substring(0, fileNm[1].Length - 3), startDate, endDate, fullPath);
+                    dt.Rows.Add("cn="+fileNm[1].Substring(0, fileNm[1].Length - 3), startDate, endDate, fullPath);
 
                     grdPcCert.FillData(dt);
 
-                    if (grdPcCert.Rows.Count > 0)
-                    {
-                        RedText();
-                    }
+                    if (grdPcCert.Rows.Count > 0) RedText();                    
                 }
-
             }
             catch
             {
@@ -308,7 +308,18 @@ namespace Mcc.Clinic.Common.D._POPUP
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            SaveData();
+            if (_status == Status.NEW)
+            {
+                if (MessageBox.Show("저장된 인증서가 존재합니다. 선택한 인증서로 변경하시겠습니까", "확인", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    Clear();
+                    SaveData();
+                }                            
+            }
+            else
+            {
+                SaveData();
+            }         
         }
 
 
@@ -380,6 +391,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 MessageBox.Show("인증서가 보관되었습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
 
                 _status = Status.NEW;
+                _selectedRow = true;
             }
             catch (Exception ex)
             {
@@ -466,7 +478,9 @@ namespace Mcc.Clinic.Common.D._POPUP
 
             if (dt.Rows.Count > 0)
             {               
-                _cbxFileNm = dt.Rows[0]["file_nm"].ToString();                
+                _cbxFileNm = dt.Rows[0]["file_nm"].ToString();    
+                string[] certNm = _cbxFileNm.Split('=');
+                
                 _status = Status.NEW;
 
                 if (!string.IsNullOrEmpty(dt.Rows[0]["cn"].ToString()))
@@ -483,7 +497,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 }
 
                 SetGrid();
-
+                lblCertInfo.Text = "[ " + certNm[1].Substring(0, certNm[1].Length - 3) + " ]" + "[ " + endDate + " ]";
                 return true;
             }
             else
@@ -530,33 +544,52 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
-        //private void GetCert()
-        //{
-        //    string path = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER\";        
-        //    DirectoryInfo di = new DirectoryInfo(path);
+        private void GetCert()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("cert_nm");
+            dt.Columns.Add("start_date");
+            dt.Columns.Add("end_date");
+            dt.Columns.Add("path");
 
-        //    foreach (FileInfo f in di.GetFiles())
-        //    {
-        //        FileStream fw = new FileStream(f.DirectoryName.ToString() + "\\" + f.Name.ToString(), FileMode.Open, FileAccess.Read);
+            string path = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER";
+            string filePath = string.Empty;      
+            DirectoryInfo di = new DirectoryInfo(path);
+            
 
-                
-        //    }
-        //}
+            if (di.Exists)
+            {
+                foreach (DirectoryInfo folder in di.GetDirectories())
+                {
+                    _loadFileNm = folder.Name;
+                    filePath = folder.FullName;
+                    CertDate();
+                    dt.Rows.Add(_loadFileNm, startDate, endDate, filePath);
+                }
+                grdPcCert.FillData(dt);
+                RedText();
+                _load = false;
+            }            
+        }
 
         private void CertDate()
         {            
             string szSignCertFile = string.Empty;
-            if (grdPcCert.Rows.Count > 0)
+            if (_load)
+            {
+                szSignCertFile = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER\" + _loadFileNm + @"\signCert.der";
+            }
+            else if (_selectedRow == true)
             {
                 CellsCollection cc = grdPcCert.ActiveRow.Cells;
                 szSignCertFile = cc["path"].Value.ToString() + @"\signCert.der";
             }
             else
             {
-                szSignCertFile = @"C:\\Users\\" + Environment.UserName.ToString() + "\\AppData\\LocalLow\\NPKI\\KICA\\USER\\" + _cbxFileNm + @"\signCert.der";
+                szSignCertFile = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER\" + _cbxFileNm + @"\signCert.der";
             }
-                       
-            
+
+
             X509Certificate2 cert = new X509Certificate2(szSignCertFile);
 
             startDate = cert.NotBefore.ToString("yyyy-MM-dd");
@@ -572,12 +605,12 @@ namespace Mcc.Clinic.Common.D._POPUP
 
             CertDate();
             
-            dt.Rows.Add(_cbxFileNm, startDate, endDate);            
-
+            dt.Rows.Add(_cbxFileNm, startDate, endDate);
+           
             grdDbCert1.FillData(dt);
             grdDbCert2.FillData(dt);
             grdDbCert3.FillData(dt);
-
+            
             RedText();
         }
 
@@ -615,8 +648,8 @@ namespace Mcc.Clinic.Common.D._POPUP
             grdDbCert1.RowsClearAll();
             grdDbCert2.RowsClearAll();
             grdDbCert3.RowsClearAll();
-            grdPcCert.RowsClearAll();
 
+            lblCertInfo.Text = "";
             txtLoginPwd.Text = "";
             txtLoginPwd.Enabled = false;
             chkAutoCert.Checked = false;
