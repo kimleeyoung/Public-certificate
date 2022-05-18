@@ -17,6 +17,8 @@ using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Asn1;
 using System.Diagnostics;
 using Infragistics.Win.UltraWinGrid;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Mcc.Clinic.Common.D._POPUP
 {
@@ -32,12 +34,16 @@ namespace Mcc.Clinic.Common.D._POPUP
         List<HospInfo> _hospInfo = new List<HospInfo>();
         HospInfo _selHosp = new HospInfo();
         Status _status = Status.OLD;        
-        string startDate = string.Empty;
-        string endDate = string.Empty;
+        string _startDate = string.Empty;
+        string _endDate = string.Empty;
         string _cbxFileNm = string.Empty;
-        string _loadFileNm = string.Empty;
+        string _loadFolderNm = string.Empty;
+        string _path = string.Empty;
+        string _folderPath = string.Empty;
         bool _load = true;
         bool _selectedRow = false;
+
+        string str = string.Empty;
         #endregion
 
         #region - constructor -
@@ -53,19 +59,21 @@ namespace Mcc.Clinic.Common.D._POPUP
                                                               , EnumBaseButtonChoose.btnbaseF10 });
 
             this.Load += new EventHandler(H0ComCertificate_new_Load);
-            this.FormClosing += new FormClosingEventHandler(H0ComCertificate_new_FormClosing);            
-            btnStaticCert.Click += BtnStaticCert_Click;
-            btnSave.Click += BtnSave_Click;
-            btnAutoLogin.Click += BtnAutoLogin_Click;
-            btnKICA.Click += BtnKICA_Click;
-            btnDown.Click += BtnDown_Click;
+            this.FormClosing += new FormClosingEventHandler(H0ComCertificate_new_FormClosing);
 
-            chkAutoCert.Click += ChkAutoCert_Click;
-            cbxHosp.SelectedValueChanged += CbxHosp_SelectedValueChanged;
-            txtLoginPwd.EnabledChanged += TxtLoginPwd_EnabledChanged;                        
+            this.btnAutoLogin.Click += BtnAutoLogin_Click;   // 인증서보관 저장하기
+            this.btnStaticCert.Click += BtnStaticCert_Click; // 인증서보관 인증서 수동선택
+            this.btnSave.Click += BtnSave_Click;             // 인증서보관 인증서 저장(서버)
+            this.btnDown.Click += BtnDown_Click;             // 인증서다운 인증서 내려받기
+            this.btnKICA.Click += BtnKICA_Click;             // 인증서갱신 인증서 갱신(한국정보인증)
+
+            this.cbxHosp.SelectedValueChanged += CbxHosp_SelectedValueChanged; // 콤보박스 요양기관 선택
+            this.chkAutoCert.Click += ChkAutoCert_Click;                       // 자동로그인 체크박스 체크
+            this.txtLoginPwd.EnabledChanged += TxtLoginPwd_EnabledChanged;     // 비밀번호 입력
+            this.icnPath.MouseHover += IcnPath_MouseHover;                     // 아이콘 마우스호버
         }
-        #endregion
 
+        #endregion
 
         #region - form events / SetInitialize -
         private void H0ComCertificate_new_Load(object sender, EventArgs e)
@@ -77,7 +85,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 this.SetGridHeader();                
                 
                 GetCert();
-                SetComboItem();
+                SetComboItem();              
             }
             catch (Exception ex)
             {
@@ -101,27 +109,30 @@ namespace Mcc.Clinic.Common.D._POPUP
         #region - SetGridHeader / SetInitialize -
         private void SetGridHeader()
         {
-            grdPcCert.AddColumn("cert_nm", "인증서명", 250, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPcCert.AddColumn("start_date", "시작일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPcCert.AddColumn("end_date", "만료일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPcCert.AddColumn("cert_nm", "인증서명", 200, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPcCert.AddColumn("start_date", "시작일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPcCert.AddColumn("end_date", "만료일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdPcCert.AddColumn("path", "경로", 100, GridColumnStyle.Default, HiddenType.True, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdPcCert.SetGridHeader();
+            grdPcCert.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
 
-            grdDbCert1.AddColumn("cert_nm", "인증서명", 250, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdDbCert1.AddColumn("start_date", "시작일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdDbCert1.AddColumn("end_date", "만료일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert1.AddColumn("cert_nm", "인증서명", 200, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert1.AddColumn("start_date", "시작일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert1.AddColumn("end_date", "만료일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdDbCert1.SetGridHeader();
+            grdDbCert1.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
 
-            grdDbCert2.AddColumn("cert_nm", "인증서명", 250, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdDbCert2.AddColumn("start_date", "시작일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdDbCert2.AddColumn("end_date", "만료일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert2.AddColumn("cert_nm", "인증서명", 200, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert2.AddColumn("start_date", "시작일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert2.AddColumn("end_date", "만료일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdDbCert2.SetGridHeader();
+            grdDbCert2.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
 
-            grdDbCert3.AddColumn("cert_nm", "인증서명", 250, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdDbCert3.AddColumn("start_date", "시작일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdDbCert3.AddColumn("end_date", "만료일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert3.AddColumn("cert_nm", "인증서명", 200, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert3.AddColumn("start_date", "시작일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdDbCert3.AddColumn("end_date", "만료일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdDbCert3.SetGridHeader();
-
+            grdDbCert3.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
         }
 
         private void SetInitialize()
@@ -130,6 +141,26 @@ namespace Mcc.Clinic.Common.D._POPUP
             lblbasetitle.Text = "공동인증서 설정/조회";
         }
         #endregion
+
+        #region - event -
+        private void BtnAutoLogin_Click(object sender, EventArgs e)
+        {
+            if (chkAutoCert.Checked && string.IsNullOrEmpty(txtLoginPwd.Text))
+            {
+                MessageBox.Show("자동로그인을 위한 인증서 암호를 입력해 주세요.");
+                txtLoginPwd.Focus();
+                return;
+            }
+            else if (this._status == Status.OLD)
+            {
+
+                MessageBox.Show("자동로그인을 위해 먼저 인증서를 등록해 주세요.");
+            }
+            else
+            {
+                SaveAutoLogin();
+            }
+        }
 
         private void BtnStaticCert_Click(object sender, EventArgs e)
         {
@@ -147,6 +178,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 {
                     fullPath = fb.SelectedPath.ToString();
                 }
+
                 if (fullPath.Contains("cn="))
                 {
                     string[] fileNm = fb.SelectedPath.Split('=');
@@ -154,23 +186,50 @@ namespace Mcc.Clinic.Common.D._POPUP
                     string szSignCertFile = fb.SelectedPath + @"\signCert.der";
                     X509Certificate2 cert = new X509Certificate2(szSignCertFile);
 
-                    startDate = cert.NotBefore.ToString("yyyy-MM-dd");
-                    endDate = cert.NotAfter.ToString("yyyy-MM-dd");
-                    if (grdPcCert.Rows.Count > 0) dt = grdPcCert.DataSource as DataTable;
+                    _startDate = cert.NotBefore.ToString("yyyy-MM-dd");
+                    _endDate = cert.NotAfter.ToString("yyyy-MM-dd");
+                    if (grdPcCert.Rows.Count > 0)
+                    {
+                        dt = grdPcCert.DataSource as DataTable;
 
-                    dt.Rows.Add("cn="+fileNm[1].Substring(0, fileNm[1].Length - 3), startDate, endDate, fullPath);
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            string fileEndDate = grdPcCert.Rows[i].Cells[2].Text;
+                            if(_endDate == fileEndDate)
+                            {
+                                MessageBox.Show("이미 보관된 인증서 입니다. 인증서를 다시 선택해주세요!");
+                                return;
+                            }
+                        }
+                    }
+                    dt.Rows.Add(fileNm[1].Substring(0,fileNm[1].Length -3), _startDate, _endDate, fullPath);
 
                     grdPcCert.FillData(dt);
 
                     if (grdPcCert.Rows.Count > 0) RedText();                    
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                    
             }
         }
 
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (_status == Status.NEW)
+            {
+                if (MessageBox.Show("저장된 인증서가 존재합니다. 선택한 인증서로 변경하시겠습니까", "확인", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    Clear();
+                    SaveData();
+                }                            
+            }
+            else
+            {
+                SaveData();
+            }         
+        }
 
         private void BtnDown_Click(object sender, EventArgs e)
         {
@@ -198,8 +257,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
                 if (dt.Rows.Count > 0)
                 {
-                    string path1 = string.Empty;
-                    string path2 = string.Empty;
+                    string path1 = string.Empty;                    
                     foreach (DataRow dr in dt.Rows)
                     {
                         if (dr["gb"].ToString().Equals("1"))
@@ -231,10 +289,10 @@ namespace Mcc.Clinic.Common.D._POPUP
                         else
                         {
                             if (dr["file_nm"].ToString().Contains(".txt")) continue;
-                            FileStream fs = new FileStream(path1 + "\\" + dr["file_nm"].ToString(), FileMode.Create);
-                            BinaryWriter w = new BinaryWriter(fs);
+                            FileStream fs = new FileStream(path1 + "\\" + dr["file_nm"].ToString(), FileMode.Create);                            
+                            BinaryWriter w = new BinaryWriter(fs);                                                    
                             byte[] buf = dr["file"] as byte[];
-                            w.Write(buf, 0, buf.Length);
+                            w.Write(buf, 0, buf.Length);                                                       
                             w.Close();
                         }
                     }
@@ -245,6 +303,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                     MessageBox.Show("저장된 인증서가 없습니다..", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                GetCert();
             }
         }
 
@@ -253,37 +312,34 @@ namespace Mcc.Clinic.Common.D._POPUP
             System.Diagnostics.Process.Start("https://www.signgate.com/renew/stepEntrpsCrtfctCnfirm.sg");
         }
 
-        private void ChkAutoCert_Click(object sender, EventArgs e)
+        private void CbxHosp_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (((CheckBox)sender).Checked)
+            Clear();
+            if (!setData_new(cbxHosp.Text))
             {
-                this.txtLoginPwd.Enabled = true;
-            }
-            else
-            {
-                this.txtLoginPwd.Enabled = false;
-                txtLoginPwd.BackColor = Color.Gainsboro;
+                setData();
             }
         }
 
-        private void BtnAutoLogin_Click(object sender, EventArgs e)
+        private void ChkAutoCert_Click(object sender, EventArgs e)
         {
-            if (chkAutoCert.Checked && string.IsNullOrEmpty(txtLoginPwd.Text))
+            if (grdDbCert1.Rows.Count > 0)
             {
-                MessageBox.Show("자동로그인을 위한 인증서 암호를 입력해 주세요.");
-                txtLoginPwd.Focus();
-                return;
-            }
-            else if (this._status == Status.OLD)
-            {
-
-                MessageBox.Show("자동로그인을 위해 먼저 인증서를 등록해 주세요.");
+                if (((CheckBox)sender).Checked)
+                {
+                    this.txtLoginPwd.Enabled = true;
+                }
+                else
+                {
+                    this.txtLoginPwd.Enabled = false;
+                    txtLoginPwd.BackColor = Color.Gainsboro;
+                }                
             }
             else
             {
-                SaveAutoLogin();
-            }
-        }        
+                MessageBox.Show("자동로그인을 위해 먼저 인증서를 등록해 주세요.");
+            }            
+        }
 
         private void TxtLoginPwd_EnabledChanged(object sender, EventArgs e)
         {
@@ -297,114 +353,106 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
-        private void CbxHosp_SelectedValueChanged(object sender, EventArgs e)
-        {
-            Clear();
-            if (!setData_new(cbxHosp.Text))
-            {
-                setData();
-            }
-        }
-
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            if (_status == Status.NEW)
-            {
-                if (MessageBox.Show("저장된 인증서가 존재합니다. 선택한 인증서로 변경하시겠습니까", "확인", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                {
-                    Clear();
-                    SaveData();
-                }                            
-            }
-            else
-            {
-                SaveData();
-            }         
-        }
-
-
-        #region - method -
-        private void SaveData()
+        private void IcnPath_MouseHover(object sender, EventArgs e)
         {
             CellsCollection cc = grdPcCert.ActiveRow.Cells;
-            //string selectedHospNm = cc["hosp_nm"].Value.ToString();
-            
-            string selectedPath = cc["path"].Value.ToString();
-            string[] hospNm = selectedPath.Split('=');
+            string selPath = cc["path"].Value.ToString();
+            icnPath.MccToolTip = "이 경로의 인증서 목록을 불러옵니다. " + selPath;
+        }        
 
-            Npgsql.NpgsqlCommand Mycmd = new Npgsql.NpgsqlCommand();
-            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
-            this.BeginTrans(sMsg, Mycmd);
+        #endregion
 
-            try
+        #region - method -
+        // 서버에 인증서 저장
+        private void SaveData()
+        {
+            if(grdPcCert.Selected.Rows.Count > 0)
             {
-                string[] path = selectedPath.ToString().Split('\\');
-                DirectoryInfo di = new DirectoryInfo(selectedPath);
+                CellsCollection cc = grdPcCert.ActiveRow.Cells;
+                //string selectedHospNm = cc["hosp_nm"].Value.ToString();
 
-                sMsg.SqlStatement = $@"delete from filesystem.certificate_hosp where hosp_cd = @hosp_cd;
+                string selectedPath = cc["path"].Value.ToString();
+                string[] hospNm = selectedPath.Split('=');
+
+                Npgsql.NpgsqlCommand Mycmd = new Npgsql.NpgsqlCommand();
+                Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
+                this.BeginTrans(sMsg, Mycmd);
+
+                try
+                {
+                    string[] path = selectedPath.ToString().Split('\\');
+                    DirectoryInfo di = new DirectoryInfo(selectedPath);
+
+                    sMsg.SqlStatement = $@"delete from filesystem.certificate_hosp where hosp_cd = @hosp_cd;
                                                 INSERT INTO 
                                                     filesystem.certificate_hosp (hosp_cd, gb, file_nm, file, cn, password)
                                                 VALUES(@hosp_cd, '1', @file_nm, @file, @cn, @password); ";
 
-                sMsg.AddParameter("hosp_cd", _selHosp.hosp_no.ToString());
-                sMsg.AddParameter("file_nm", path[path.Length - 1].ToString());
-                sMsg.AddParameter("file", "");
+                    sMsg.AddParameter("hosp_cd", _selHosp.hosp_no.ToString());
+                    sMsg.AddParameter("file_nm", path[path.Length - 1].ToString());
+                    sMsg.AddParameter("file", "");
 
-                if (chkAutoCert.Checked)
-                {
-                    //int tempLength = hospNm[1].IndexOf(',');
-                    string certNM = hospNm[1].Substring(0, hospNm[1].Length - 3);
-                    string pwd = Encrypt(txtLoginPwd.Text, "eghis123");
+                    if (chkAutoCert.Checked)
+                    {
+                        //int tempLength = hospNm[1].IndexOf(',');
+                        string certNM = hospNm[1].Substring(0, hospNm[1].Length - 3);
+                        string pwd = Encrypt(txtLoginPwd.Text, "eghis123");
 
-                    sMsg.AddParameter("cn", certNM);
-                    sMsg.AddParameter("password", pwd);
-                }
-                else
-                {
-                    sMsg.AddParameter("cn", null);
-                    sMsg.AddParameter("password", null);
-                }
-                this.ExecuteNonQuery(sMsg, Mycmd);
+                        sMsg.AddParameter("cn", certNM);
+                        sMsg.AddParameter("password", pwd);
+                    }
+                    else
+                    {
+                        sMsg.AddParameter("cn", null);
+                        sMsg.AddParameter("password", null);
+                    }
+                    this.ExecuteNonQuery(sMsg, Mycmd);
 
 
-                foreach (FileInfo f in di.GetFiles())
-                {
-                    FileStream fw = new FileStream(f.DirectoryName.ToString() + "\\" + f.Name.ToString(), FileMode.Open, FileAccess.Read);
+                    foreach (FileInfo f in di.GetFiles())
+                    {
+                        FileStream fw = new FileStream(f.DirectoryName.ToString() + "\\" + f.Name.ToString(), FileMode.Open, FileAccess.Read);
 
-                    byte[] data = new byte[fw.Length];
-                    fw.Read(data, 0, (int)fw.Length);
+                        byte[] data = new byte[fw.Length];
+                        fw.Read(data, 0, (int)fw.Length);
 
-                    sMsg = new Mcc.Series.DataBase.DBMessage();
-                    sMsg.SqlStatement = @"INSERT INTO 
+                        sMsg = new Mcc.Series.DataBase.DBMessage();
+                        sMsg.SqlStatement = @"INSERT INTO 
                                             filesystem.certificate_hosp
                                         ( hosp_cd,  gb,  file_nm,  file)
                                         VALUES ( @hosp_cd, 2,  @file_nm,  @file);
                                         ;";
-                    sMsg.AddParameter("hosp_cd", _selHosp.hosp_no.ToString());
-                    sMsg.AddParameter("file_nm", f.Name.ToString());
-                    sMsg.AddParameter("file", data);
+                        sMsg.AddParameter("hosp_cd", _selHosp.hosp_no.ToString());
+                        sMsg.AddParameter("file_nm", f.Name.ToString());
+                        sMsg.AddParameter("file", data);
 
-                    this.ExecuteNonQuery(sMsg, Mycmd);
-                    fw.Close();
+                        this.ExecuteNonQuery(sMsg, Mycmd);
+                        fw.Close();
+                    }
+                    this.CommitTrans(Mycmd);
+                    MessageBox.Show("인증서가 보관되었습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+
+                    _status = Status.NEW;
+                    _selectedRow = true;
                 }
-                this.CommitTrans(Mycmd);
-                MessageBox.Show("인증서가 보관되었습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                catch (Exception ex)
+                {
+                    this.RollbackTrans(Mycmd);
+                    MessageBox.Show("저장 중 오류가 발생되었습니다. \n" + ex.ToString(), "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
-                _status = Status.NEW;
-                _selectedRow = true;
+                if (!setData_new(cbxHosp.Text))
+                {
+                    setData();
+                }
             }
-            catch (Exception ex)
+            else
             {
-                this.RollbackTrans(Mycmd);
-                MessageBox.Show("저장 중 오류가 발생되었습니다. \n" + ex.ToString(), "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            if (!setData_new(cbxHosp.Text))
-            {
-                setData();
-            }
+                MessageBox.Show("인증서를 선택 후 등록해주세요");
+            }           
         }
 
+        // 자동로그인(암호저장)
         private void SaveAutoLogin()
         {
             string[] fileNM = _cbxFileNm.Split('=');
@@ -454,6 +502,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
+        // setData_new가 아닌 경우, 현재 보여지는 요양기관에 대한 데이터 가져옴
         private void setData()
         {
             Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
@@ -464,6 +513,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             dt = this.FillDataSet(sMsg).Tables[0];            
         }
 
+        // 콤보박스의 요양기관들 중 현재 보여지는 것이 아닌 요양기관 선택 시 데이터 가져옴
         private bool setData_new(string hospNm)
         {
             _selHosp = _hospInfo.AsEnumerable().Where(x => x.hosp_nm == hospNm).FirstOrDefault();
@@ -497,7 +547,11 @@ namespace Mcc.Clinic.Common.D._POPUP
                 }
 
                 SetGrid();
-                lblCertInfo.Text = "[ " + certNm[1].Substring(0, certNm[1].Length - 3) + " ]" + "[ " + endDate + " ]";
+                if(grdDbCert3.Rows.Count > 0)
+                {
+                    lblCertInfo.Text = "[ " + certNm[1].Substring(0, certNm[1].Length - 3) + " ]" +
+                    Environment.NewLine + "[ " + _endDate + " ]";
+                }                
                 return true;
             }
             else
@@ -507,6 +561,9 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
+        
+
+        // 서버 저장된 요양기관들 콤보박스에 보여주기
         private void SetComboItem()
         {
             Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
@@ -544,40 +601,62 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
+        // 경로에서 인증서 가져오기
         private void GetCert()
         {
             DataTable dt = new DataTable();
+            
             dt.Columns.Add("cert_nm");
             dt.Columns.Add("start_date");
             dt.Columns.Add("end_date");
             dt.Columns.Add("path");
 
-            string path = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER";
-            string filePath = string.Empty;      
-            DirectoryInfo di = new DirectoryInfo(path);
-            
+            _path = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER";            
+                        
+            DirectoryInfo di = new DirectoryInfo(_path);            
 
             if (di.Exists)
             {
                 foreach (DirectoryInfo folder in di.GetDirectories())
                 {
-                    _loadFileNm = folder.Name;
-                    filePath = folder.FullName;
-                    CertDate();
-                    dt.Rows.Add(_loadFileNm, startDate, endDate, filePath);
-                }
+                    if (folder.Name.Contains("cn="))
+                    {
+                        _loadFolderNm = folder.Name;
+                        string[] folderNm = _loadFolderNm.Split('=');
+                        _folderPath = folder.FullName;
+                        CertDate();
+                        dt.Rows.Add(folderNm[1].Substring(0,folderNm[1].Length-3), _startDate, _endDate, _folderPath);
+                        _load = false;
+                    }
+                    else
+                    {
+                        foreach (DirectoryInfo folderInFolder in folder.GetDirectories())
+                        {
+                            if (folderInFolder.Name.Contains("cn="))
+                            {
+                                _loadFolderNm = folderInFolder.Name;
+                                string[] folderNm = _loadFolderNm.Split('=');
+                                _folderPath = folderInFolder.FullName;
+                                CertDate();
+                                dt.Rows.Add(folderNm[1].Substring(0, folderNm[1].Length - 3), _startDate, _endDate, _folderPath);
+                            }                            
+                        }
+                    }                    
+                }                
                 grdPcCert.FillData(dt);
-                RedText();
-                _load = false;
+                RedText();                
             }            
         }
 
+        // 인증서 시작일자 만료일자 가져오기
         private void CertDate()
         {            
             string szSignCertFile = string.Empty;
+            // 처음실행시 인증서 보관
+            // 내PC에 보관된 인증서 리스트 가져온다.
             if (_load)
             {
-                szSignCertFile = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER\" + _loadFileNm + @"\signCert.der";
+                szSignCertFile = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER\" + _loadFolderNm + @"\signCert.der";
             }
             else if (_selectedRow == true)
             {
@@ -586,34 +665,68 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
             else
             {
-                szSignCertFile = @"C:\Users\" + Environment.UserName.ToString() + @"\AppData\LocalLow\NPKI\KICA\USER\" + _cbxFileNm + @"\signCert.der";
+                // 서버에 저장된 인증서 위치경로를 가져온다
+                // 그런데 포맷할경우 인증서가 위치에 없네 !?!?!  에러 ! 
+                szSignCertFile = _folderPath + @"\signCert.der";
             }
 
 
             X509Certificate2 cert = new X509Certificate2(szSignCertFile);
 
-            startDate = cert.NotBefore.ToString("yyyy-MM-dd");
-            endDate = cert.NotAfter.ToString("yyyy-MM-dd");
+            _startDate = cert.NotBefore.ToString("yyyy-MM-dd");
+            _endDate = cert.NotAfter.ToString("yyyy-MM-dd");
         }
 
+        // 서버에 저장된 인증서 보여주는 그리드 만들기
         private void SetGrid()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("cert_nm");
             dt.Columns.Add("start_date");
-            dt.Columns.Add("end_date");            
+            dt.Columns.Add("end_date");
 
-            CertDate();
-            
-            dt.Rows.Add(_cbxFileNm, startDate, endDate);
-           
-            grdDbCert1.FillData(dt);
-            grdDbCert2.FillData(dt);
-            grdDbCert3.FillData(dt);
-            
-            RedText();
+            DirectoryInfo di = new DirectoryInfo(_path);
+            if (di.Exists)
+            {
+                foreach (DirectoryInfo folder in di.GetDirectories())
+                {
+                    if (folder.Name.Contains(_cbxFileNm))
+                    {
+                        //CertDate();
+                        DbCert();
+
+                        dt.Rows.Add(_cbxFileNm, _startDate, _endDate);
+
+                        grdDbCert1.FillData(dt);
+                        grdDbCert2.FillData(dt);
+                        grdDbCert3.FillData(dt);
+
+                        RedText();
+                    }                    
+                }
+            }       
         }
 
+        private void DbCert()
+        {
+            _selHosp = _hospInfo.AsEnumerable().Where(x => x.hosp_nm == cbxHosp.Text).FirstOrDefault();
+            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
+            sMsg.SqlStatement = $@"select * from filesystem.certificate_hosp 
+                                    where gb = '2' and file_nm = 'signCert.der' and hosp_cd = '{_selHosp.hosp_no}'";
+            DataTable dt;
+            dt = this.FillDataSet(sMsg).Tables[0];
+            
+            if (dt.Rows.Count > 0)
+            {
+                byte[] buf = dt.Rows[0]["file"] as byte[];
+                string str = Encoding.Default.GetString(buf);
+
+                var certificate = new X509Certificate2(Convert.FromBase64String(str));
+                var exportedPrivate = certificate.PrivateKey.ToXmlString(true);                
+            }
+        }
+
+        // 만료일자 기준 빨간색 처리
         private void RedText()
         { 
             foreach(UltraGridRow ur in grdDbCert1.Rows)
@@ -643,6 +756,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
+        //초기화
         private void Clear()
         {
             grdDbCert1.RowsClearAll();
@@ -700,6 +814,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
             return false;
         }
+
         #endregion
 
 
@@ -709,7 +824,5 @@ namespace Mcc.Clinic.Common.D._POPUP
             public string hosp_nm { get; set; }
             public string hosp_main { get; set; }
         }
-
-       
     }
 }
