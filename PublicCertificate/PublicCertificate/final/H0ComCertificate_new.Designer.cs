@@ -41,6 +41,7 @@
             Infragistics.Win.Appearance appearance50 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance51 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance52 = new Infragistics.Win.Appearance();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(H0ComCertificate_new));
             Infragistics.Win.Appearance appearance5 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand2 = new Infragistics.Win.UltraWinGrid.UltraGridBand("", -1);
             Infragistics.Win.Appearance appearance6 = new Infragistics.Win.Appearance();
@@ -87,7 +88,6 @@
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab1 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab2 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab3 = new Infragistics.Win.UltraWinTabControl.UltraTab();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(H0ComCertificate_new));
             this.ultraTabPageControl1 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.mccTableLayoutPanel3 = new Mcc.Series.Controls.MccTableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -96,6 +96,7 @@
             this.grdDbCert1 = new Mcc.Series.Controls.MccGrid();
             this.chkAutoCert = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.icnPath = new Mcc.Series.Controls.MccIcon();
             this.grdPcCert = new Mcc.Series.Controls.MccGrid();
             this.btnStaticCert = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -107,10 +108,12 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.grdDbCert2 = new Mcc.Series.Controls.MccGrid();
             this.ultraTabPageControl3 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
-            this.btnKICA = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.mccTableLayoutPanel4 = new Mcc.Series.Controls.MccTableLayoutPanel();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.grdDbCert3 = new Mcc.Series.Controls.MccGrid();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblCertInfo = new System.Windows.Forms.Label();
+            this.btnKICA = new System.Windows.Forms.Button();
             this.mccTextBox2 = new Mcc.Series.Controls.MccTextBox();
             this.mccPanel2 = new Mcc.Series.Controls.MccPanel();
             this.mccTableLayoutPanel1 = new Mcc.Series.Controls.MccTableLayoutPanel();
@@ -122,11 +125,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.mccIcon1 = new Mcc.Series.Controls.MccIcon();
-            this.icnCategory = new Mcc.Series.Controls.MccIcon();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.lblCertInfo = new System.Windows.Forms.Label();
-            this.mccTableLayoutPanel4 = new Mcc.Series.Controls.MccTableLayoutPanel();
             this.pnlbasetop.SuspendLayout();
             this.pnlbasemain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxbasetitle)).BeginInit();
@@ -137,11 +135,13 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDbCert1)).BeginInit();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.icnPath)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdPcCert)).BeginInit();
             this.ultraTabPageControl2.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDbCert2)).BeginInit();
             this.ultraTabPageControl3.SuspendLayout();
+            this.mccTableLayoutPanel4.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDbCert3)).BeginInit();
             this.mccPanel2.SuspendLayout();
@@ -151,18 +151,16 @@
             this.mccTabControl1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mccIcon1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icnCategory)).BeginInit();
-            this.mccTableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlbasetop
             // 
-            this.pnlbasetop.Size = new System.Drawing.Size(549, 32);
+            this.pnlbasetop.Size = new System.Drawing.Size(489, 32);
             // 
             // pnlbasemain
             // 
             this.pnlbasemain.Controls.Add(this.mccPanel2);
-            this.pnlbasemain.Size = new System.Drawing.Size(549, 516);
+            this.pnlbasemain.Size = new System.Drawing.Size(489, 516);
             // 
             // btnbaseF8
             // 
@@ -196,19 +194,19 @@
             // 
             // pnlpopup
             // 
-            this.pnlpopup.Size = new System.Drawing.Size(549, 1);
+            this.pnlpopup.Size = new System.Drawing.Size(489, 1);
             // 
             // pnalbasetopbtn
             // 
-            this.pnalbasetopbtn.Location = new System.Drawing.Point(-94, 0);
+            this.pnalbasetopbtn.Location = new System.Drawing.Point(-154, 0);
             // 
             // ultraTabPageControl1
             // 
             this.ultraTabPageControl1.Controls.Add(this.mccTableLayoutPanel3);
-            this.ultraTabPageControl1.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl1.Location = new System.Drawing.Point(7, 31);
             this.ultraTabPageControl1.Margin = new System.Windows.Forms.Padding(0);
             this.ultraTabPageControl1.Name = "ultraTabPageControl1";
-            this.ultraTabPageControl1.Size = new System.Drawing.Size(519, 383);
+            this.ultraTabPageControl1.Size = new System.Drawing.Size(459, 383);
             // 
             // mccTableLayoutPanel3
             // 
@@ -224,7 +222,7 @@
             this.mccTableLayoutPanel3.RowCount = 2;
             this.mccTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.51436F));
             this.mccTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 58.48564F));
-            this.mccTableLayoutPanel3.Size = new System.Drawing.Size(519, 383);
+            this.mccTableLayoutPanel3.Size = new System.Drawing.Size(459, 383);
             this.mccTableLayoutPanel3.TabIndex = 1;
             // 
             // groupBox2
@@ -237,7 +235,7 @@
             this.groupBox2.Location = new System.Drawing.Point(5, 5);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(5);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(509, 148);
+            this.groupBox2.Size = new System.Drawing.Size(449, 148);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "서버에 저장된 인증서";
@@ -246,17 +244,17 @@
             // 
             this.txtLoginPwd.BackColor = System.Drawing.Color.Gainsboro;
             this.txtLoginPwd.Font = new System.Drawing.Font("굴림체", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.txtLoginPwd.Location = new System.Drawing.Point(108, 106);
+            this.txtLoginPwd.Location = new System.Drawing.Point(102, 106);
             this.txtLoginPwd.Margin = new System.Windows.Forms.Padding(1);
             this.txtLoginPwd.MccBackColor = System.Drawing.Color.Gainsboro;
             this.txtLoginPwd.Name = "txtLoginPwd";
             this.txtLoginPwd.PasswordChar = '*';
-            this.txtLoginPwd.Size = new System.Drawing.Size(262, 24);
+            this.txtLoginPwd.Size = new System.Drawing.Size(205, 24);
             this.txtLoginPwd.TabIndex = 2;
             // 
             // btnAutoLogin
             // 
-            this.btnAutoLogin.Location = new System.Drawing.Point(373, 104);
+            this.btnAutoLogin.Location = new System.Drawing.Point(310, 104);
             this.btnAutoLogin.Margin = new System.Windows.Forms.Padding(1);
             this.btnAutoLogin.Name = "btnAutoLogin";
             this.btnAutoLogin.Size = new System.Drawing.Size(124, 27);
@@ -328,11 +326,11 @@
             this.grdDbCert1.DisplayLayout.ViewStyleBand = Infragistics.Win.UltraWinGrid.ViewStyleBand.OutlookGroupBy;
             this.grdDbCert1.DoNotAutomaticallyUpdate = false;
             this.grdDbCert1.ExceptCellChangeEventColumns = new string[0];
-            this.grdDbCert1.Location = new System.Drawing.Point(8, 21);
+            this.grdDbCert1.Location = new System.Drawing.Point(11, 20);
             this.grdDbCert1.MccLastLayoutMemory = true;
             this.grdDbCert1.MccNonHeaderLineColor = false;
             this.grdDbCert1.Name = "grdDbCert1";
-            this.grdDbCert1.Size = new System.Drawing.Size(489, 74);
+            this.grdDbCert1.Size = new System.Drawing.Size(428, 74);
             this.grdDbCert1.TabIndex = 0;
             this.grdDbCert1.Text = "mccGrid1";
             this.grdDbCert1.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
@@ -350,7 +348,7 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.icnCategory);
+            this.groupBox5.Controls.Add(this.icnPath);
             this.groupBox5.Controls.Add(this.grdPcCert);
             this.groupBox5.Controls.Add(this.btnStaticCert);
             this.groupBox5.Controls.Add(this.btnSave);
@@ -358,10 +356,26 @@
             this.groupBox5.Location = new System.Drawing.Point(5, 163);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(5);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(509, 215);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(5);
+            this.groupBox5.Size = new System.Drawing.Size(449, 215);
             this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "내PC에 보관된 인증서";
+            this.groupBox5.Text = "내PC에 보관된 인증서    ";
+            // 
+            // icnPath
+            // 
+            this.icnPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.icnPath.BackColor = System.Drawing.Color.Transparent;
+            this.icnPath.Image = ((System.Drawing.Image)(resources.GetObject("icnPath.Image")));
+            this.icnPath.Location = new System.Drawing.Point(133, -2);
+            this.icnPath.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.icnPath.MccIconSize = Mcc.Series.Controls.IconSize.Size_16x16;
+            this.icnPath.MccIconType = Mcc.Series.Controls.IconType.Help;
+            this.icnPath.MccToolTip = "어떤 경로에 보관된 인증서인지 보고싶으시면 셀을 클릭한 후 이곳에 마우스를 올려주세요.";
+            this.icnPath.Name = "icnPath";
+            this.icnPath.Size = new System.Drawing.Size(16, 16);
+            this.icnPath.TabIndex = 6;
+            this.icnPath.TabStop = false;
             // 
             // grdPcCert
             // 
@@ -427,11 +441,11 @@
             this.grdPcCert.DisplayLayout.ViewStyleBand = Infragistics.Win.UltraWinGrid.ViewStyleBand.OutlookGroupBy;
             this.grdPcCert.DoNotAutomaticallyUpdate = false;
             this.grdPcCert.ExceptCellChangeEventColumns = new string[0];
-            this.grdPcCert.Location = new System.Drawing.Point(7, 29);
+            this.grdPcCert.Location = new System.Drawing.Point(11, 30);
             this.grdPcCert.MccLastLayoutMemory = true;
             this.grdPcCert.MccNonHeaderLineColor = false;
             this.grdPcCert.Name = "grdPcCert";
-            this.grdPcCert.Size = new System.Drawing.Size(489, 144);
+            this.grdPcCert.Size = new System.Drawing.Size(428, 144);
             this.grdPcCert.TabIndex = 0;
             this.grdPcCert.Text = "mccGrid1";
             this.grdPcCert.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
@@ -439,7 +453,7 @@
             // btnStaticCert
             // 
             this.btnStaticCert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStaticCert.Location = new System.Drawing.Point(246, 179);
+            this.btnStaticCert.Location = new System.Drawing.Point(184, 177);
             this.btnStaticCert.Margin = new System.Windows.Forms.Padding(1);
             this.btnStaticCert.Name = "btnStaticCert";
             this.btnStaticCert.Size = new System.Drawing.Size(124, 27);
@@ -450,7 +464,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(372, 179);
+            this.btnSave.Location = new System.Drawing.Point(310, 177);
             this.btnSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(124, 27);
@@ -467,12 +481,12 @@
             this.ultraTabPageControl2.Controls.Add(this.groupBox7);
             this.ultraTabPageControl2.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl2.Name = "ultraTabPageControl2";
-            this.ultraTabPageControl2.Size = new System.Drawing.Size(519, 383);
+            this.ultraTabPageControl2.Size = new System.Drawing.Size(459, 383);
             // 
             // btnDown
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDown.Location = new System.Drawing.Point(382, 330);
+            this.btnDown.Location = new System.Drawing.Point(322, 330);
             this.btnDown.Margin = new System.Windows.Forms.Padding(1);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(124, 43);
@@ -516,7 +530,7 @@
             this.groupBox7.Controls.Add(this.grdDbCert2);
             this.groupBox7.Location = new System.Drawing.Point(3, 3);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(513, 125);
+            this.groupBox7.Size = new System.Drawing.Size(449, 114);
             this.groupBox7.TabIndex = 7;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "서버에 저장된 인증서";
@@ -589,7 +603,7 @@
             this.grdDbCert2.MccLastLayoutMemory = false;
             this.grdDbCert2.MccNonHeaderLineColor = false;
             this.grdDbCert2.Name = "grdDbCert2";
-            this.grdDbCert2.Size = new System.Drawing.Size(493, 92);
+            this.grdDbCert2.Size = new System.Drawing.Size(428, 74);
             this.grdDbCert2.TabIndex = 0;
             this.grdDbCert2.Text = "mccGrid4";
             this.grdDbCert2.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
@@ -597,40 +611,37 @@
             // ultraTabPageControl3
             // 
             this.ultraTabPageControl3.Controls.Add(this.mccTableLayoutPanel4);
-            this.ultraTabPageControl3.Location = new System.Drawing.Point(7, 31);
+            this.ultraTabPageControl3.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl3.Name = "ultraTabPageControl3";
-            this.ultraTabPageControl3.Size = new System.Drawing.Size(519, 383);
+            this.ultraTabPageControl3.Size = new System.Drawing.Size(459, 383);
             // 
-            // btnKICA
+            // mccTableLayoutPanel4
             // 
-            this.btnKICA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnKICA.Location = new System.Drawing.Point(352, 339);
-            this.btnKICA.Margin = new System.Windows.Forms.Padding(1);
-            this.btnKICA.Name = "btnKICA";
-            this.btnKICA.Size = new System.Drawing.Size(166, 43);
-            this.btnKICA.TabIndex = 12;
-            this.btnKICA.Text = "인증서 갱신(한국정보인증)";
-            this.btnKICA.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("굴림체", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label2.Location = new System.Drawing.Point(64, 133);
-            this.label2.Margin = new System.Windows.Forms.Padding(1);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(391, 45);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "서버에 저장된 인증서 아래일까지 사용 가능합니다.\r\n";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.mccTableLayoutPanel4.ColumnCount = 1;
+            this.mccTableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mccTableLayoutPanel4.Controls.Add(this.groupBox6, 0, 0);
+            this.mccTableLayoutPanel4.Controls.Add(this.label2, 0, 1);
+            this.mccTableLayoutPanel4.Controls.Add(this.lblCertInfo, 0, 2);
+            this.mccTableLayoutPanel4.Controls.Add(this.btnKICA, 0, 3);
+            this.mccTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mccTableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
+            this.mccTableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+            this.mccTableLayoutPanel4.MccBorderColor = System.Drawing.Color.Transparent;
+            this.mccTableLayoutPanel4.Name = "mccTableLayoutPanel4";
+            this.mccTableLayoutPanel4.RowCount = 4;
+            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.50914F));
+            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.37076F));
+            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18.27676F));
+            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.36554F));
+            this.mccTableLayoutPanel4.Size = new System.Drawing.Size(459, 383);
+            this.mccTableLayoutPanel4.TabIndex = 0;
             // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.grdDbCert3);
             this.groupBox6.Location = new System.Drawing.Point(3, 3);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(513, 125);
+            this.groupBox6.Size = new System.Drawing.Size(449, 109);
             this.groupBox6.TabIndex = 8;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "서버에 저장된 인증서";
@@ -699,14 +710,51 @@
             this.grdDbCert3.DisplayLayout.ViewStyleBand = Infragistics.Win.UltraWinGrid.ViewStyleBand.OutlookGroupBy;
             this.grdDbCert3.DoNotAutomaticallyUpdate = false;
             this.grdDbCert3.ExceptCellChangeEventColumns = new string[0];
-            this.grdDbCert3.Location = new System.Drawing.Point(11, 21);
+            this.grdDbCert3.Location = new System.Drawing.Point(10, 21);
             this.grdDbCert3.MccLastLayoutMemory = false;
             this.grdDbCert3.MccNonHeaderLineColor = false;
             this.grdDbCert3.Name = "grdDbCert3";
-            this.grdDbCert3.Size = new System.Drawing.Size(490, 92);
+            this.grdDbCert3.Size = new System.Drawing.Size(428, 74);
             this.grdDbCert3.TabIndex = 0;
             this.grdDbCert3.Text = "mccGrid3";
             this.grdDbCert3.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label2.Font = new System.Drawing.Font("굴림체", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label2.Location = new System.Drawing.Point(1, 136);
+            this.label2.Margin = new System.Windows.Forms.Padding(1);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(457, 98);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "서버에 저장된 인증서 아래일까지 사용 가능합니다.\r\n유효기간(끝)이 지날 경우 수진자 자격조회, 국민건강보험공단, 심사평가원 등.. 업무진행에 문" +
+    "제가 될 수 있으므로 \r\n반드시, 유효기간(끝) 전에 한국정보인증에 접속하셔서 \r\n인증서를 갱신 받으시길 바랍니다.";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCertInfo
+            // 
+            this.lblCertInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.lblCertInfo.AutoSize = true;
+            this.lblCertInfo.Font = new System.Drawing.Font("굴림체", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.lblCertInfo.Location = new System.Drawing.Point(155, 236);
+            this.lblCertInfo.Margin = new System.Windows.Forms.Padding(1);
+            this.lblCertInfo.Name = "lblCertInfo";
+            this.lblCertInfo.Size = new System.Drawing.Size(149, 67);
+            this.lblCertInfo.TabIndex = 13;
+            this.lblCertInfo.Text = "[ 인증서명 ] \r\n[ xxxx-xx-xx ]";
+            this.lblCertInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnKICA
+            // 
+            this.btnKICA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnKICA.Location = new System.Drawing.Point(285, 332);
+            this.btnKICA.Margin = new System.Windows.Forms.Padding(8);
+            this.btnKICA.Name = "btnKICA";
+            this.btnKICA.Size = new System.Drawing.Size(166, 43);
+            this.btnKICA.TabIndex = 12;
+            this.btnKICA.Text = "인증서 갱신(한국정보인증)";
+            this.btnKICA.UseVisualStyleBackColor = true;
             // 
             // mccTextBox2
             // 
@@ -727,7 +775,7 @@
             this.mccPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mccPanel2.Location = new System.Drawing.Point(5, 3);
             this.mccPanel2.Name = "mccPanel2";
-            this.mccPanel2.Size = new System.Drawing.Size(539, 513);
+            this.mccPanel2.Size = new System.Drawing.Size(479, 513);
             this.mccPanel2.TabIndex = 10;
             // 
             // mccTableLayoutPanel1
@@ -745,7 +793,7 @@
             this.mccTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.mccTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mccTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.mccTableLayoutPanel1.Size = new System.Drawing.Size(539, 513);
+            this.mccTableLayoutPanel1.Size = new System.Drawing.Size(479, 513);
             this.mccTableLayoutPanel1.TabIndex = 0;
             // 
             // mccTableLayoutPanel2
@@ -761,7 +809,7 @@
             this.mccTableLayoutPanel2.Name = "mccTableLayoutPanel2";
             this.mccTableLayoutPanel2.RowCount = 1;
             this.mccTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mccTableLayoutPanel2.Size = new System.Drawing.Size(539, 30);
+            this.mccTableLayoutPanel2.Size = new System.Drawing.Size(479, 30);
             this.mccTableLayoutPanel2.TabIndex = 0;
             // 
             // mccLabel3
@@ -770,7 +818,7 @@
             this.mccLabel3.AutoSize = true;
             this.mccLabel3.BackColor = System.Drawing.Color.Transparent;
             this.mccLabel3.Font = new System.Drawing.Font("굴림체", 9F, System.Drawing.FontStyle.Bold);
-            this.mccLabel3.Location = new System.Drawing.Point(40, 9);
+            this.mccLabel3.Location = new System.Drawing.Point(32, 9);
             this.mccLabel3.Margin = new System.Windows.Forms.Padding(1);
             this.mccLabel3.Name = "mccLabel3";
             this.mccLabel3.Size = new System.Drawing.Size(57, 12);
@@ -783,7 +831,7 @@
             this.cbxHosp.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cbxHosp.Font = new System.Drawing.Font("굴림체", 9F);
             this.cbxHosp.FormattingEnabled = true;
-            this.cbxHosp.Location = new System.Drawing.Point(166, 5);
+            this.cbxHosp.Location = new System.Drawing.Point(128, 5);
             this.cbxHosp.Margin = new System.Windows.Forms.Padding(0);
             this.cbxHosp.Name = "cbxHosp";
             this.cbxHosp.Size = new System.Drawing.Size(345, 20);
@@ -819,7 +867,7 @@
             this.mccTabControl1.MccTabGroup = 0;
             this.mccTabControl1.Name = "mccTabControl1";
             this.mccTabControl1.SharedControlsPage = this.ultraTabSharedControlsPage1;
-            this.mccTabControl1.Size = new System.Drawing.Size(533, 421);
+            this.mccTabControl1.Size = new System.Drawing.Size(473, 421);
             this.mccTabControl1.Style = Infragistics.Win.UltraWinTabControl.UltraTabControlStyle.PropertyPageFlat;
             appearance4.BackColor = System.Drawing.Color.Transparent;
             this.mccTabControl1.TabHeaderAreaAppearance = appearance4;
@@ -847,7 +895,7 @@
             // 
             this.ultraTabSharedControlsPage1.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabSharedControlsPage1.Name = "ultraTabSharedControlsPage1";
-            this.ultraTabSharedControlsPage1.Size = new System.Drawing.Size(519, 383);
+            this.ultraTabSharedControlsPage1.Size = new System.Drawing.Size(459, 383);
             // 
             // panel1
             // 
@@ -857,7 +905,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 483);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(539, 30);
+            this.panel1.Size = new System.Drawing.Size(479, 30);
             this.panel1.TabIndex = 2;
             // 
             // label1
@@ -879,90 +927,11 @@
             this.mccIcon1.TabIndex = 1;
             this.mccIcon1.TabStop = false;
             // 
-            // icnCategory
-            // 
-            this.icnCategory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.icnCategory.BackColor = System.Drawing.Color.Transparent;
-            this.icnCategory.Image = ((System.Drawing.Image)(resources.GetObject("icnCategory.Image")));
-            this.icnCategory.Location = new System.Drawing.Point(480, 11);
-            this.icnCategory.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.icnCategory.MccIconSize = Mcc.Series.Controls.IconSize.Size_16x16;
-            this.icnCategory.MccIconType = Mcc.Series.Controls.IconType.Help;
-            this.icnCategory.MccToolTip = "이 경로의 인증서 목록을 불러옵니다. C:\\Users\\admin\\AppData\\LocalLow\\NPKI\\KICA\\USER";
-            this.icnCategory.Name = "icnCategory";
-            this.icnCategory.Size = new System.Drawing.Size(16, 16);
-            this.icnCategory.TabIndex = 6;
-            this.icnCategory.TabStop = false;
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("굴림체", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label5.Location = new System.Drawing.Point(16, 234);
-            this.label5.Margin = new System.Windows.Forms.Padding(1);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(487, 48);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "유효기간(끝)이 지날 경우 수진자 자격조회, 국민건강보험공단, \r\n심사평가원 등.. 업무진행에 문제가 될 수 있으므로";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("굴림체", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label6.Location = new System.Drawing.Point(84, 284);
-            this.label6.Margin = new System.Windows.Forms.Padding(1);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(351, 51);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "반드시, 유효기간(끝) 전에 한국정보인증에\r\n접속하셔서 인증서를 갱신 받으시길 바랍니다.\r\n";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblCertInfo
-            // 
-            this.lblCertInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.lblCertInfo.AutoSize = true;
-            this.lblCertInfo.Font = new System.Drawing.Font("굴림체", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.lblCertInfo.Location = new System.Drawing.Point(185, 180);
-            this.lblCertInfo.Margin = new System.Windows.Forms.Padding(1);
-            this.lblCertInfo.Name = "lblCertInfo";
-            this.lblCertInfo.Size = new System.Drawing.Size(149, 52);
-            this.lblCertInfo.TabIndex = 13;
-            this.lblCertInfo.Text = "[ 인증서명 ] \r\n[ xxxx-xx-xx ]";
-            this.lblCertInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // mccTableLayoutPanel4
-            // 
-            this.mccTableLayoutPanel4.ColumnCount = 1;
-            this.mccTableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mccTableLayoutPanel4.Controls.Add(this.groupBox6, 0, 0);
-            this.mccTableLayoutPanel4.Controls.Add(this.btnKICA, 0, 5);
-            this.mccTableLayoutPanel4.Controls.Add(this.lblCertInfo, 0, 2);
-            this.mccTableLayoutPanel4.Controls.Add(this.label6, 0, 4);
-            this.mccTableLayoutPanel4.Controls.Add(this.label2, 0, 1);
-            this.mccTableLayoutPanel4.Controls.Add(this.label5, 0, 3);
-            this.mccTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mccTableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
-            this.mccTableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-            this.mccTableLayoutPanel4.MccBorderColor = System.Drawing.Color.Transparent;
-            this.mccTableLayoutPanel4.Name = "mccTableLayoutPanel4";
-            this.mccTableLayoutPanel4.RowCount = 6;
-            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 47F));
-            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
-            this.mccTableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 47F));
-            this.mccTableLayoutPanel4.Size = new System.Drawing.Size(519, 383);
-            this.mccTableLayoutPanel4.TabIndex = 14;
-            // 
             // H0ComCertificate_new
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 558);
+            this.ClientSize = new System.Drawing.Size(493, 558);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "H0ComCertificate_new";
             this.Text = this.Name;
@@ -978,12 +947,15 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDbCert1)).EndInit();
             this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.icnPath)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdPcCert)).EndInit();
             this.ultraTabPageControl2.ResumeLayout(false);
             this.ultraTabPageControl2.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdDbCert2)).EndInit();
             this.ultraTabPageControl3.ResumeLayout(false);
+            this.mccTableLayoutPanel4.ResumeLayout(false);
+            this.mccTableLayoutPanel4.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdDbCert3)).EndInit();
             this.mccPanel2.ResumeLayout(false);
@@ -995,9 +967,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mccIcon1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icnCategory)).EndInit();
-            this.mccTableLayoutPanel4.ResumeLayout(false);
-            this.mccTableLayoutPanel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1037,10 +1006,8 @@
         private System.Windows.Forms.Button btnKICA;
         private System.Windows.Forms.Label label2;
         private Series.Controls.MccTableLayoutPanel mccTableLayoutPanel3;
-        private Series.Controls.MccIcon icnCategory;
+        private Series.Controls.MccIcon icnPath;
         private System.Windows.Forms.Label lblCertInfo;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private Series.Controls.MccTableLayoutPanel mccTableLayoutPanel4;
     }
 }
