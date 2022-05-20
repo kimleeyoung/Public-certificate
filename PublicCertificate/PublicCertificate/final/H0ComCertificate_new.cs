@@ -157,6 +157,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             {
                 string fullPath = string.Empty;
                 FolderBrowserDialog fb = new FolderBrowserDialog();
+
                 DataTable dt = new DataTable();
                 dt.Columns.Add("cert_nm");
                 dt.Columns.Add("start_date");
@@ -177,6 +178,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
                     _startDate = cert.NotBefore.ToString("yyyy-MM-dd");
                     _endDate = cert.NotAfter.ToString("yyyy-MM-dd");
+
                     if (grdPcCert.Rows.Count > 0)
                     {
                         dt = grdPcCert.DataSource as DataTable;
@@ -192,7 +194,6 @@ namespace Mcc.Clinic.Common.D._POPUP
                         }
                     }
                     dt.Rows.Add(fileNm[1].Substring(0,fileNm[1].Length -3), _startDate, _endDate, fullPath);
-
                     grdPcCert.FillData(dt);
 
                     if (grdPcCert.Rows.Count > 0) RedText();                    
@@ -740,9 +741,9 @@ namespace Mcc.Clinic.Common.D._POPUP
             DataTable table;
             table = this.FillDataSet(sMsg).Tables[0];
 
-            if (dt.Rows.Count > 0)
+            if (table.Rows.Count > 0)
             {
-                byte[] buf = dt.Rows[0]["file"] as byte[];
+                byte[] buf = table.Rows[0]["file"] as byte[];
                 X509Certificate2 cert = new X509Certificate2(buf);
 
                 _startDate = cert.NotBefore.ToString("yyyy-MM-dd");
