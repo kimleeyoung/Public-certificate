@@ -1,9 +1,11 @@
 # 공인인증서
 - 인증서 갱신하기(한국정보인증)
-- 인증서 DB에 백업 및 클라이언트 복사하기
-- 인증서 자동로그인 위치 설정하기
-- 인증서 심평원 등록하기 
+- 인증서 자동로그인 기능
+- 내PC 인증서 보여주기
+- 내PC 인증서 선택 후 DB에 저장하기
+- 내PC에 인증서 없더라도 DB에 인증서 저장되어 있으면 내PC로 내려받기 가능
 
+# 화면
 ![image](https://user-images.githubusercontent.com/65011438/167378303-b4eb2fde-797f-4791-896c-8055b3ff117b.png)
 
 
@@ -29,3 +31,4 @@
 
 
 ![image](https://user-images.githubusercontent.com/65011438/168738881-4583e978-f8a8-460c-9a4f-2395f06d5bd5.png)
+
