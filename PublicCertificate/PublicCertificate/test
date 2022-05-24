@@ -229,6 +229,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             {
                 MessageBox.Show("현재 내PC에 인증서가 없습니다.");
             }
+            RedText();
         }
 
         private void BtnDown_Click(object sender, EventArgs e)
@@ -307,14 +308,16 @@ namespace Mcc.Clinic.Common.D._POPUP
                             }
                         }
                         else
-                        {                            
+                        {         
+                            //경로1 내려받은 인증서 파일 내용 Db저장                   
                             if (dr["file_nm"].ToString().Contains(".txt")) continue;
                             FileStream fs = new FileStream(path1 + "\\" + dr["file_nm"].ToString(), FileMode.Create);
                             BinaryWriter w = new BinaryWriter(fs);
                             byte[] buf = dr["file"] as byte[];
                             w.Write(buf, 0, buf.Length);
                             w.Close();
-                            
+
+                            //경로2 내려받은 인증서 파일 내용 Db저장        
                             fs = new FileStream(path2 + "\\" + dr["file_nm"].ToString(), FileMode.Create);
                             w = new BinaryWriter(fs);
                             buf = dr["file"] as byte[];
@@ -326,7 +329,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 }
                 else
                 {
-                    MessageBox.Show("저장된 인증서가 없습니다..", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("저장된 인증서가 없습니다.", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 grdPcCert.RowsClearAll();
@@ -488,9 +491,8 @@ namespace Mcc.Clinic.Common.D._POPUP
                 string[] path = selectedPath.ToString().Split('\\');
 
                 sMsg.SqlStatement = $@"delete from filesystem.certificate_hosp where hosp_cd = @hosp_cd;
-                                            INSERT INTO 
-                                                filesystem.certificate_hosp (hosp_cd, gb, file_nm, file, cn, password)
-                                            VALUES(@hosp_cd, '1', @file_nm, @file, @cn, @password); ";
+                                       INSERT INTO filesystem.certificate_hosp (hosp_cd, gb, file_nm, file, cn, password)
+                                       VALUES(@hosp_cd, '1', @file_nm, @file, @cn, @password); ";
 
                 sMsg.AddParameter("hosp_cd", cbxHosp.SelectedValue.ToString());
                 sMsg.AddParameter("file_nm", path[path.Length - 1].ToString());
@@ -521,11 +523,9 @@ namespace Mcc.Clinic.Common.D._POPUP
                     fw.Read(data, 0, (int)fw.Length);
 
                     sMsg = new Mcc.Series.DataBase.DBMessage();
-                    sMsg.SqlStatement = @"INSERT INTO 
-                                        filesystem.certificate_hosp
-                                    ( hosp_cd,  gb,  file_nm,  file)
-                                    VALUES ( @hosp_cd, 2,  @file_nm,  @file);
-                                    ;";
+                    sMsg.SqlStatement = @"INSERT INTO filesystem.certificate_hosp( hosp_cd,  gb,  file_nm,  file)
+                                          VALUES(@hosp_cd, 2,  @file_nm,  @file);";
+
                     sMsg.AddParameter("hosp_cd", cbxHosp.SelectedValue.ToString());
                     sMsg.AddParameter("file_nm", f.Name.ToString());
                     sMsg.AddParameter("file", data);
@@ -592,14 +592,13 @@ namespace Mcc.Clinic.Common.D._POPUP
             sMsg.SqlStatement = @"select a.hosp_no,a.hosp_nm 
                                      ,max(case when a.main_yn = 'Y' then a.hosp_no else '' end) over() as main_hosp_cd
                                 from hz_mst_hosp a
-                                order by main_yn desc, a.hosp_no";
+                                order by main_yn desc, a.hosp_nm";
 
             DataTable dt = this.FillDataSet(sMsg).Tables[0];
+
             if (dt.Rows.Count > 0)
-            {
-                string mainHosp = dt.Rows[0]["main_hosp_cd"].ToString();
-            
-                if(!mainHosp.Equals(""))
+            {           
+                if(!dt.Rows[0]["main_hosp_cd"].ToString().Equals(""))
                 {
                     cbxHosp.FillData(dt, "hosp_nm", "hosp_no", Mcc.Series.Controls.Enum.AddingItemMode.None);
                 }
