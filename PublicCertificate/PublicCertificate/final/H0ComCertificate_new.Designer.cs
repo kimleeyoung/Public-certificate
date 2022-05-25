@@ -42,21 +42,8 @@
             Infragistics.Win.Appearance appearance9 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance15 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance13 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance17 = new Infragistics.Win.Appearance();
-            Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand2 = new Infragistics.Win.UltraWinGrid.UltraGridBand("", -1);
-            Infragistics.Win.Appearance appearance18 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance19 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance20 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance21 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance22 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance23 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance24 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance25 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance26 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance27 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance28 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance29 = new Infragistics.Win.Appearance();
-            Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand3 = new Infragistics.Win.UltraWinGrid.UltraGridBand("", -1);
+            Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand2 = new Infragistics.Win.UltraWinGrid.UltraGridBand("", -1);
             Infragistics.Win.Appearance appearance30 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance31 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance32 = new Infragistics.Win.Appearance();
@@ -68,6 +55,19 @@
             Infragistics.Win.Appearance appearance38 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance39 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance40 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance53 = new Infragistics.Win.Appearance();
+            Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand3 = new Infragistics.Win.UltraWinGrid.UltraGridBand("", -1);
+            Infragistics.Win.Appearance appearance54 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance55 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance56 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance57 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance58 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance59 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance60 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance61 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance62 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance63 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance64 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance41 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand4 = new Infragistics.Win.UltraWinGrid.UltraGridBand("", -1);
             Infragistics.Win.Appearance appearance42 = new Infragistics.Win.Appearance();
@@ -95,9 +95,9 @@
             this.btnStaticCert = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.grdDbCert1 = new Mcc.Series.Controls.MccGrid();
             this.txtLoginPwd = new Mcc.Series.Controls.MccTextBox();
             this.btnAutoLogin = new System.Windows.Forms.Button();
-            this.grdDbCert1 = new Mcc.Series.Controls.MccGrid();
             this.chkAutoCert = new System.Windows.Forms.CheckBox();
             this.ultraTabPageControl2 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.btnDown = new System.Windows.Forms.Button();
@@ -301,7 +301,7 @@
             this.grdPcCert.DisplayLayout.ViewStyleBand = Infragistics.Win.UltraWinGrid.ViewStyleBand.OutlookGroupBy;
             this.grdPcCert.DoNotAutomaticallyUpdate = false;
             this.grdPcCert.ExceptCellChangeEventColumns = new string[0];
-            this.grdPcCert.Location = new System.Drawing.Point(11, 30);
+            this.grdPcCert.Location = new System.Drawing.Point(13, 29);
             this.grdPcCert.MccLastLayoutMemory = false;
             this.grdPcCert.MccNonHeaderLineColor = false;
             this.grdPcCert.Name = "grdPcCert";
@@ -334,9 +334,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.grdDbCert1);
             this.groupBox2.Controls.Add(this.txtLoginPwd);
             this.groupBox2.Controls.Add(this.btnAutoLogin);
-            this.groupBox2.Controls.Add(this.grdDbCert1);
             this.groupBox2.Controls.Add(this.chkAutoCert);
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(5);
@@ -345,6 +345,79 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "서버에 저장된 인증서";
+            // 
+            // grdDbCert1
+            // 
+            appearance29.BackColor = System.Drawing.SystemColors.Window;
+            appearance29.BorderColor = System.Drawing.SystemColors.InactiveCaption;
+            this.grdDbCert1.DisplayLayout.Appearance = appearance29;
+            ultraGridBand2.Override.AllowRowFiltering = Infragistics.Win.DefaultableBoolean.False;
+            ultraGridBand2.Override.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.EditAndSelectText;
+            ultraGridBand2.Override.RowSelectorHeaderStyle = Infragistics.Win.UltraWinGrid.RowSelectorHeaderStyle.SeparateElement;
+            this.grdDbCert1.DisplayLayout.BandsSerializer.Add(ultraGridBand2);
+            this.grdDbCert1.DisplayLayout.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
+            this.grdDbCert1.DisplayLayout.CaptionVisible = Infragistics.Win.DefaultableBoolean.False;
+            appearance30.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            appearance30.BackColor2 = System.Drawing.SystemColors.ControlDark;
+            appearance30.BackGradientStyle = Infragistics.Win.GradientStyle.Vertical;
+            appearance30.BorderColor = System.Drawing.SystemColors.Window;
+            this.grdDbCert1.DisplayLayout.GroupByBox.Appearance = appearance30;
+            appearance31.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.grdDbCert1.DisplayLayout.GroupByBox.BandLabelAppearance = appearance31;
+            this.grdDbCert1.DisplayLayout.GroupByBox.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
+            this.grdDbCert1.DisplayLayout.GroupByBox.Hidden = true;
+            appearance32.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            appearance32.BackColor2 = System.Drawing.SystemColors.Control;
+            appearance32.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
+            appearance32.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.grdDbCert1.DisplayLayout.GroupByBox.PromptAppearance = appearance32;
+            this.grdDbCert1.DisplayLayout.MaxColScrollRegions = 1;
+            this.grdDbCert1.DisplayLayout.MaxRowScrollRegions = 1;
+            appearance33.BackColor = System.Drawing.SystemColors.Window;
+            appearance33.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.grdDbCert1.DisplayLayout.Override.ActiveCellAppearance = appearance33;
+            appearance34.BackColor = System.Drawing.SystemColors.Highlight;
+            appearance34.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.grdDbCert1.DisplayLayout.Override.ActiveRowAppearance = appearance34;
+            this.grdDbCert1.DisplayLayout.Override.BorderStyleCell = Infragistics.Win.UIElementBorderStyle.Dotted;
+            this.grdDbCert1.DisplayLayout.Override.BorderStyleRow = Infragistics.Win.UIElementBorderStyle.Dotted;
+            appearance35.BackColor = System.Drawing.SystemColors.Window;
+            this.grdDbCert1.DisplayLayout.Override.CardAreaAppearance = appearance35;
+            appearance36.BorderColor = System.Drawing.Color.Silver;
+            appearance36.TextTrimming = Infragistics.Win.TextTrimming.EllipsisCharacter;
+            this.grdDbCert1.DisplayLayout.Override.CellAppearance = appearance36;
+            this.grdDbCert1.DisplayLayout.Override.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.EditAndSelectText;
+            this.grdDbCert1.DisplayLayout.Override.CellPadding = 0;
+            appearance37.BackColor = System.Drawing.SystemColors.Control;
+            appearance37.BackColor2 = System.Drawing.SystemColors.ControlDark;
+            appearance37.BackGradientAlignment = Infragistics.Win.GradientAlignment.Element;
+            appearance37.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
+            appearance37.BorderColor = System.Drawing.SystemColors.Window;
+            this.grdDbCert1.DisplayLayout.Override.GroupByRowAppearance = appearance37;
+            appearance38.TextHAlignAsString = "Left";
+            this.grdDbCert1.DisplayLayout.Override.HeaderAppearance = appearance38;
+            this.grdDbCert1.DisplayLayout.Override.HeaderClickAction = Infragistics.Win.UltraWinGrid.HeaderClickAction.SortMulti;
+            this.grdDbCert1.DisplayLayout.Override.HeaderStyle = Infragistics.Win.HeaderStyle.WindowsXPCommand;
+            appearance39.BackColor = System.Drawing.SystemColors.Window;
+            appearance39.BorderColor = System.Drawing.Color.Silver;
+            this.grdDbCert1.DisplayLayout.Override.RowAppearance = appearance39;
+            this.grdDbCert1.DisplayLayout.Override.RowSelectors = Infragistics.Win.DefaultableBoolean.False;
+            appearance40.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.grdDbCert1.DisplayLayout.Override.TemplateAddRowAppearance = appearance40;
+            this.grdDbCert1.DisplayLayout.Override.TipStyleHeader = Infragistics.Win.UltraWinGrid.TipStyle.Hide;
+            this.grdDbCert1.DisplayLayout.ScrollBounds = Infragistics.Win.UltraWinGrid.ScrollBounds.ScrollToFill;
+            this.grdDbCert1.DisplayLayout.ScrollStyle = Infragistics.Win.UltraWinGrid.ScrollStyle.Immediate;
+            this.grdDbCert1.DisplayLayout.ViewStyleBand = Infragistics.Win.UltraWinGrid.ViewStyleBand.OutlookGroupBy;
+            this.grdDbCert1.DoNotAutomaticallyUpdate = false;
+            this.grdDbCert1.ExceptCellChangeEventColumns = new string[0];
+            this.grdDbCert1.Location = new System.Drawing.Point(10, 21);
+            this.grdDbCert1.MccLastLayoutMemory = false;
+            this.grdDbCert1.MccNonHeaderLineColor = false;
+            this.grdDbCert1.Name = "grdDbCert1";
+            this.grdDbCert1.Size = new System.Drawing.Size(428, 74);
+            this.grdDbCert1.TabIndex = 4;
+            this.grdDbCert1.Text = "mccGrid4";
+            this.grdDbCert1.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
             // 
             // txtLoginPwd
             // 
@@ -367,79 +440,6 @@
             this.btnAutoLogin.TabIndex = 1;
             this.btnAutoLogin.Text = "저장하기";
             this.btnAutoLogin.UseVisualStyleBackColor = true;
-            // 
-            // grdDbCert1
-            // 
-            appearance17.BackColor = System.Drawing.SystemColors.Window;
-            appearance17.BorderColor = System.Drawing.SystemColors.InactiveCaption;
-            this.grdDbCert1.DisplayLayout.Appearance = appearance17;
-            ultraGridBand2.Override.AllowRowFiltering = Infragistics.Win.DefaultableBoolean.False;
-            ultraGridBand2.Override.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.EditAndSelectText;
-            ultraGridBand2.Override.RowSelectorHeaderStyle = Infragistics.Win.UltraWinGrid.RowSelectorHeaderStyle.SeparateElement;
-            this.grdDbCert1.DisplayLayout.BandsSerializer.Add(ultraGridBand2);
-            this.grdDbCert1.DisplayLayout.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
-            this.grdDbCert1.DisplayLayout.CaptionVisible = Infragistics.Win.DefaultableBoolean.False;
-            appearance18.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            appearance18.BackColor2 = System.Drawing.SystemColors.ControlDark;
-            appearance18.BackGradientStyle = Infragistics.Win.GradientStyle.Vertical;
-            appearance18.BorderColor = System.Drawing.SystemColors.Window;
-            this.grdDbCert1.DisplayLayout.GroupByBox.Appearance = appearance18;
-            appearance19.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.grdDbCert1.DisplayLayout.GroupByBox.BandLabelAppearance = appearance19;
-            this.grdDbCert1.DisplayLayout.GroupByBox.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
-            this.grdDbCert1.DisplayLayout.GroupByBox.Hidden = true;
-            appearance20.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            appearance20.BackColor2 = System.Drawing.SystemColors.Control;
-            appearance20.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
-            appearance20.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.grdDbCert1.DisplayLayout.GroupByBox.PromptAppearance = appearance20;
-            this.grdDbCert1.DisplayLayout.MaxColScrollRegions = 1;
-            this.grdDbCert1.DisplayLayout.MaxRowScrollRegions = 1;
-            appearance21.BackColor = System.Drawing.SystemColors.Window;
-            appearance21.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.grdDbCert1.DisplayLayout.Override.ActiveCellAppearance = appearance21;
-            appearance22.BackColor = System.Drawing.SystemColors.Highlight;
-            appearance22.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.grdDbCert1.DisplayLayout.Override.ActiveRowAppearance = appearance22;
-            this.grdDbCert1.DisplayLayout.Override.BorderStyleCell = Infragistics.Win.UIElementBorderStyle.Dotted;
-            this.grdDbCert1.DisplayLayout.Override.BorderStyleRow = Infragistics.Win.UIElementBorderStyle.Dotted;
-            appearance23.BackColor = System.Drawing.SystemColors.Window;
-            this.grdDbCert1.DisplayLayout.Override.CardAreaAppearance = appearance23;
-            appearance24.BorderColor = System.Drawing.Color.Silver;
-            appearance24.TextTrimming = Infragistics.Win.TextTrimming.EllipsisCharacter;
-            this.grdDbCert1.DisplayLayout.Override.CellAppearance = appearance24;
-            this.grdDbCert1.DisplayLayout.Override.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.EditAndSelectText;
-            this.grdDbCert1.DisplayLayout.Override.CellPadding = 0;
-            appearance25.BackColor = System.Drawing.SystemColors.Control;
-            appearance25.BackColor2 = System.Drawing.SystemColors.ControlDark;
-            appearance25.BackGradientAlignment = Infragistics.Win.GradientAlignment.Element;
-            appearance25.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
-            appearance25.BorderColor = System.Drawing.SystemColors.Window;
-            this.grdDbCert1.DisplayLayout.Override.GroupByRowAppearance = appearance25;
-            appearance26.TextHAlignAsString = "Left";
-            this.grdDbCert1.DisplayLayout.Override.HeaderAppearance = appearance26;
-            this.grdDbCert1.DisplayLayout.Override.HeaderClickAction = Infragistics.Win.UltraWinGrid.HeaderClickAction.SortMulti;
-            this.grdDbCert1.DisplayLayout.Override.HeaderStyle = Infragistics.Win.HeaderStyle.WindowsXPCommand;
-            appearance27.BackColor = System.Drawing.SystemColors.Window;
-            appearance27.BorderColor = System.Drawing.Color.Silver;
-            this.grdDbCert1.DisplayLayout.Override.RowAppearance = appearance27;
-            this.grdDbCert1.DisplayLayout.Override.RowSelectors = Infragistics.Win.DefaultableBoolean.False;
-            appearance28.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.grdDbCert1.DisplayLayout.Override.TemplateAddRowAppearance = appearance28;
-            this.grdDbCert1.DisplayLayout.Override.TipStyleHeader = Infragistics.Win.UltraWinGrid.TipStyle.Hide;
-            this.grdDbCert1.DisplayLayout.ScrollBounds = Infragistics.Win.UltraWinGrid.ScrollBounds.ScrollToFill;
-            this.grdDbCert1.DisplayLayout.ScrollStyle = Infragistics.Win.UltraWinGrid.ScrollStyle.Immediate;
-            this.grdDbCert1.DisplayLayout.ViewStyleBand = Infragistics.Win.UltraWinGrid.ViewStyleBand.OutlookGroupBy;
-            this.grdDbCert1.DoNotAutomaticallyUpdate = false;
-            this.grdDbCert1.ExceptCellChangeEventColumns = new string[0];
-            this.grdDbCert1.Location = new System.Drawing.Point(10, 21);
-            this.grdDbCert1.MccLastLayoutMemory = true;
-            this.grdDbCert1.MccNonHeaderLineColor = false;
-            this.grdDbCert1.Name = "grdDbCert1";
-            this.grdDbCert1.Size = new System.Drawing.Size(428, 74);
-            this.grdDbCert1.TabIndex = 0;
-            this.grdDbCert1.Text = "mccGrid1";
-            this.grdDbCert1.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
             // 
             // chkAutoCert
             // 
@@ -487,22 +487,22 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("굴림체", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(10, 251);
+            this.label4.Location = new System.Drawing.Point(10, 236);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(424, 32);
+            this.label4.Size = new System.Drawing.Size(432, 32);
             this.label4.TabIndex = 9;
-            this.label4.Text = "경로: C:\\Users\\eGhis\\AppData\\LocalLow\\NPKI\\KICA\\USER\r\n      C:\\Program Files\\NPKI\\K" +
+            this.label4.Text = "경로1: C:\\Users\\eGhis\\AppData\\LocalLow\\NPKI\\KICA\\USER\r\n경로2: C:\\Program Files\\NPKI\\K" +
     "ICA\\USER";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("굴림체", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label3.Location = new System.Drawing.Point(30, 174);
+            this.label3.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label3.Location = new System.Drawing.Point(-3, 207);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(389, 38);
+            this.label3.Size = new System.Drawing.Size(464, 17);
             this.label3.TabIndex = 8;
-            this.label3.Text = "인증서 내려받기 버튼을 통해 저장되는\r\n인증서는 아래의 경로에 저장됩니다.";
+            this.label3.Text = "인증서 내려받기 버튼을 통해 아래의 두 가지 경로에 인증서가 저장됩니다\r\n";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupBox7
@@ -517,62 +517,62 @@
             // 
             // grdDbCert2
             // 
-            appearance29.BackColor = System.Drawing.SystemColors.Window;
-            appearance29.BorderColor = System.Drawing.SystemColors.InactiveCaption;
-            this.grdDbCert2.DisplayLayout.Appearance = appearance29;
+            appearance53.BackColor = System.Drawing.SystemColors.Window;
+            appearance53.BorderColor = System.Drawing.SystemColors.InactiveCaption;
+            this.grdDbCert2.DisplayLayout.Appearance = appearance53;
             ultraGridBand3.Override.AllowRowFiltering = Infragistics.Win.DefaultableBoolean.False;
             ultraGridBand3.Override.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.EditAndSelectText;
             ultraGridBand3.Override.RowSelectorHeaderStyle = Infragistics.Win.UltraWinGrid.RowSelectorHeaderStyle.SeparateElement;
             this.grdDbCert2.DisplayLayout.BandsSerializer.Add(ultraGridBand3);
             this.grdDbCert2.DisplayLayout.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
             this.grdDbCert2.DisplayLayout.CaptionVisible = Infragistics.Win.DefaultableBoolean.False;
-            appearance30.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            appearance30.BackColor2 = System.Drawing.SystemColors.ControlDark;
-            appearance30.BackGradientStyle = Infragistics.Win.GradientStyle.Vertical;
-            appearance30.BorderColor = System.Drawing.SystemColors.Window;
-            this.grdDbCert2.DisplayLayout.GroupByBox.Appearance = appearance30;
-            appearance31.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.grdDbCert2.DisplayLayout.GroupByBox.BandLabelAppearance = appearance31;
+            appearance54.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            appearance54.BackColor2 = System.Drawing.SystemColors.ControlDark;
+            appearance54.BackGradientStyle = Infragistics.Win.GradientStyle.Vertical;
+            appearance54.BorderColor = System.Drawing.SystemColors.Window;
+            this.grdDbCert2.DisplayLayout.GroupByBox.Appearance = appearance54;
+            appearance55.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.grdDbCert2.DisplayLayout.GroupByBox.BandLabelAppearance = appearance55;
             this.grdDbCert2.DisplayLayout.GroupByBox.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid;
             this.grdDbCert2.DisplayLayout.GroupByBox.Hidden = true;
-            appearance32.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            appearance32.BackColor2 = System.Drawing.SystemColors.Control;
-            appearance32.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
-            appearance32.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.grdDbCert2.DisplayLayout.GroupByBox.PromptAppearance = appearance32;
+            appearance56.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            appearance56.BackColor2 = System.Drawing.SystemColors.Control;
+            appearance56.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
+            appearance56.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.grdDbCert2.DisplayLayout.GroupByBox.PromptAppearance = appearance56;
             this.grdDbCert2.DisplayLayout.MaxColScrollRegions = 1;
             this.grdDbCert2.DisplayLayout.MaxRowScrollRegions = 1;
-            appearance33.BackColor = System.Drawing.SystemColors.Window;
-            appearance33.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.grdDbCert2.DisplayLayout.Override.ActiveCellAppearance = appearance33;
-            appearance34.BackColor = System.Drawing.SystemColors.Highlight;
-            appearance34.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.grdDbCert2.DisplayLayout.Override.ActiveRowAppearance = appearance34;
+            appearance57.BackColor = System.Drawing.SystemColors.Window;
+            appearance57.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.grdDbCert2.DisplayLayout.Override.ActiveCellAppearance = appearance57;
+            appearance58.BackColor = System.Drawing.SystemColors.Highlight;
+            appearance58.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.grdDbCert2.DisplayLayout.Override.ActiveRowAppearance = appearance58;
             this.grdDbCert2.DisplayLayout.Override.BorderStyleCell = Infragistics.Win.UIElementBorderStyle.Dotted;
             this.grdDbCert2.DisplayLayout.Override.BorderStyleRow = Infragistics.Win.UIElementBorderStyle.Dotted;
-            appearance35.BackColor = System.Drawing.SystemColors.Window;
-            this.grdDbCert2.DisplayLayout.Override.CardAreaAppearance = appearance35;
-            appearance36.BorderColor = System.Drawing.Color.Silver;
-            appearance36.TextTrimming = Infragistics.Win.TextTrimming.EllipsisCharacter;
-            this.grdDbCert2.DisplayLayout.Override.CellAppearance = appearance36;
+            appearance59.BackColor = System.Drawing.SystemColors.Window;
+            this.grdDbCert2.DisplayLayout.Override.CardAreaAppearance = appearance59;
+            appearance60.BorderColor = System.Drawing.Color.Silver;
+            appearance60.TextTrimming = Infragistics.Win.TextTrimming.EllipsisCharacter;
+            this.grdDbCert2.DisplayLayout.Override.CellAppearance = appearance60;
             this.grdDbCert2.DisplayLayout.Override.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.EditAndSelectText;
             this.grdDbCert2.DisplayLayout.Override.CellPadding = 0;
-            appearance37.BackColor = System.Drawing.SystemColors.Control;
-            appearance37.BackColor2 = System.Drawing.SystemColors.ControlDark;
-            appearance37.BackGradientAlignment = Infragistics.Win.GradientAlignment.Element;
-            appearance37.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
-            appearance37.BorderColor = System.Drawing.SystemColors.Window;
-            this.grdDbCert2.DisplayLayout.Override.GroupByRowAppearance = appearance37;
-            appearance38.TextHAlignAsString = "Left";
-            this.grdDbCert2.DisplayLayout.Override.HeaderAppearance = appearance38;
+            appearance61.BackColor = System.Drawing.SystemColors.Control;
+            appearance61.BackColor2 = System.Drawing.SystemColors.ControlDark;
+            appearance61.BackGradientAlignment = Infragistics.Win.GradientAlignment.Element;
+            appearance61.BackGradientStyle = Infragistics.Win.GradientStyle.Horizontal;
+            appearance61.BorderColor = System.Drawing.SystemColors.Window;
+            this.grdDbCert2.DisplayLayout.Override.GroupByRowAppearance = appearance61;
+            appearance62.TextHAlignAsString = "Left";
+            this.grdDbCert2.DisplayLayout.Override.HeaderAppearance = appearance62;
             this.grdDbCert2.DisplayLayout.Override.HeaderClickAction = Infragistics.Win.UltraWinGrid.HeaderClickAction.SortMulti;
             this.grdDbCert2.DisplayLayout.Override.HeaderStyle = Infragistics.Win.HeaderStyle.WindowsXPCommand;
-            appearance39.BackColor = System.Drawing.SystemColors.Window;
-            appearance39.BorderColor = System.Drawing.Color.Silver;
-            this.grdDbCert2.DisplayLayout.Override.RowAppearance = appearance39;
+            appearance63.BackColor = System.Drawing.SystemColors.Window;
+            appearance63.BorderColor = System.Drawing.Color.Silver;
+            this.grdDbCert2.DisplayLayout.Override.RowAppearance = appearance63;
             this.grdDbCert2.DisplayLayout.Override.RowSelectors = Infragistics.Win.DefaultableBoolean.False;
-            appearance40.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.grdDbCert2.DisplayLayout.Override.TemplateAddRowAppearance = appearance40;
+            appearance64.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.grdDbCert2.DisplayLayout.Override.TemplateAddRowAppearance = appearance64;
             this.grdDbCert2.DisplayLayout.Override.TipStyleHeader = Infragistics.Win.UltraWinGrid.TipStyle.Hide;
             this.grdDbCert2.DisplayLayout.ScrollBounds = Infragistics.Win.UltraWinGrid.ScrollBounds.ScrollToFill;
             this.grdDbCert2.DisplayLayout.ScrollStyle = Infragistics.Win.UltraWinGrid.ScrollStyle.Immediate;
@@ -968,7 +968,6 @@
         private Series.Controls.MccGrid grdPcCert;
         private Series.Controls.MccTextBox txtLoginPwd;
         private System.Windows.Forms.Button btnAutoLogin;
-        private Series.Controls.MccGrid grdDbCert1;
         private System.Windows.Forms.CheckBox chkAutoCert;
         private System.Windows.Forms.Button btnStaticCert;
         private System.Windows.Forms.Button btnSave;
@@ -988,5 +987,6 @@
         private Series.Controls.MccIcon mccIcon1;
         private System.Windows.Forms.GroupBox groupBox7;
         private Series.Controls.MccGrid grdDbCert2;
+        private Series.Controls.MccGrid grdDbCert1;
     }
 }
