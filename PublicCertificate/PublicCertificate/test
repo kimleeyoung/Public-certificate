@@ -110,8 +110,7 @@ namespace Mcc.Clinic.Common.D._POPUP
         }
 
         private void SetInitialize()
-        {
-            // To Do..
+        {            
             lblbasetitle.Text = "공동인증서 설정/조회";
         }
         #endregion
@@ -127,7 +126,6 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
             else if (grdDbCert1.Rows == null)
             {
-
                 MessageBox.Show("자동로그인을 위해 먼저 인증서를 등록해 주세요.");
             }
             else
@@ -191,7 +189,6 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
         }
 
-        #region - 주석 -
         private void BtnSave_Click(object sender, EventArgs e)
         {
             if(grdPcCert.Rows.Count > 0)
@@ -336,9 +333,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 GetPcCert();
                 RedText();
             }
-        }
-
-        #endregion
+        }        
 
         private void BtnKICA_Click(object sender, EventArgs e)
         {
@@ -358,68 +353,6 @@ namespace Mcc.Clinic.Common.D._POPUP
             }
             RedText();
         }
-        
-        private void SetData()
-        {
-            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
-            sMsg.SqlStatement = $@"select * from filesystem.certificate_hosp a
-                                     where a.gb = '1' and a.hosp_cd = @hosp_no";
-            sMsg.AddParameter("hosp_no", cbxHosp.SelectedValue.ToString());
-
-            DataTable dt = this.FillDataSet(sMsg).Tables[0];
-            
-            if (dt.Rows.Count > 0)
-            {
-                //서버에 저장된 인증서
-                string[] cbxCertNm = dt.Rows[0]["file_nm"].ToString().Split('=');
-
-                DataTable dtT = new DataTable();
-                dtT.Columns.Add("cert_nm");
-                dtT.Columns.Add("start_date");
-                dtT.Columns.Add("end_date");
-
-                Mcc.Series.DataBase.DBMessage ssMsg = new Mcc.Series.DataBase.DBMessage();
-                ssMsg.SqlStatement = $@"select * from filesystem.certificate_hosp 
-                                            where gb = '2' and file_nm = 'signCert.der' and hosp_cd = @hosp_no";
-                ssMsg.AddParameter("hosp_no", cbxHosp.SelectedValue.ToString());
-
-                DataTable dtS;
-                dtS = this.FillDataSet(ssMsg).Tables[0];
-
-                if (dtS.Rows.Count > 0)
-                {
-                    byte[] buf = dtS.Rows[0]["file"] as byte[];
-                    X509Certificate2 cert = new X509Certificate2(buf);
-
-                    string sDate = cert.NotBefore.ToString("yyyy-MM-dd");
-                    string eDate = cert.NotAfter.ToString("yyyy-MM-dd");
-
-                    dtT.Rows.Add(cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3), sDate, eDate);
-
-                    grdDbCert1.FillData(dtT);
-                    grdDbCert2.FillData(dtT);
-                    grdDbCert3.FillData(dtT);
-
-                    lblCertInfo.Text = "[ " + cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3) + " ]" +
-                    Environment.NewLine + "[ " + dtT.Rows[0]["end_date"].ToString() + " ]";
-                }
-
-                // 자동로그인 데이터
-                if (!string.IsNullOrEmpty(dt.Rows[0]["cn"].ToString()))
-                {
-                    this.chkAutoCert.Checked = true;
-                    this.txtLoginPwd.Enabled = true;
-                    this.txtLoginPwd.Text = Decrypt(dt.Rows[0]["password"].ToString(), "eghis123");
-                }
-                else
-                {
-                    this.chkAutoCert.Checked = false;
-                    this.txtLoginPwd.Enabled = false;
-                    this.txtLoginPwd.Text = "";
-                }                                
-            }
-        }
-       
 
         private void ChkAutoCert_Click(object sender, EventArgs e)
         {
@@ -469,6 +402,68 @@ namespace Mcc.Clinic.Common.D._POPUP
         #endregion
 
         #region - method -
+        //서버에 저장된 (인증서 + 자동 로그인) 데이터 가져오기
+        private void SetData()
+        {
+            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
+            sMsg.SqlStatement = $@"select * from filesystem.certificate_hosp a
+                                   where a.gb = '1' and a.hosp_cd = @hosp_no";
+            sMsg.AddParameter("hosp_no", cbxHosp.SelectedValue.ToString());
+
+            DataTable dt = this.FillDataSet(sMsg).Tables[0];
+
+            if (dt.Rows.Count > 0)
+            {
+                //서버에 저장된 인증서
+                string[] cbxCertNm = dt.Rows[0]["file_nm"].ToString().Split('=');
+
+                DataTable dtT = new DataTable();
+                dtT.Columns.Add("cert_nm");
+                dtT.Columns.Add("start_date");
+                dtT.Columns.Add("end_date");
+
+                Mcc.Series.DataBase.DBMessage ssMsg = new Mcc.Series.DataBase.DBMessage();
+                ssMsg.SqlStatement = $@"select * from filesystem.certificate_hosp 
+                                            where gb = '2' and file_nm = 'signCert.der' and hosp_cd = @hosp_no";
+                ssMsg.AddParameter("hosp_no", cbxHosp.SelectedValue.ToString());
+
+                DataTable dtS;
+                dtS = this.FillDataSet(ssMsg).Tables[0];
+
+                if (dtS.Rows.Count > 0)
+                {
+                    byte[] buf = dtS.Rows[0]["file"] as byte[];
+                    X509Certificate2 cert = new X509Certificate2(buf);
+
+                    string sDate = cert.NotBefore.ToString("yyyy-MM-dd");
+                    string eDate = cert.NotAfter.ToString("yyyy-MM-dd");
+
+                    dtT.Rows.Add(cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3), sDate, eDate);
+
+                    grdDbCert1.FillData(dtT);
+                    grdDbCert2.FillData(dtT);
+                    grdDbCert3.FillData(dtT);
+
+                    lblCertInfo.Text = "[ " + cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3) + " ]" +
+                    Environment.NewLine + "[ " + dtT.Rows[0]["end_date"].ToString() + " ]";
+                }
+
+                // 자동로그인 데이터
+                if (!string.IsNullOrEmpty(dt.Rows[0]["cn"].ToString()))
+                {
+                    this.chkAutoCert.Checked = true;
+                    this.txtLoginPwd.Enabled = true;
+                    this.txtLoginPwd.Text = Decrypt(dt.Rows[0]["password"].ToString(), "eghis123");
+                }
+                else
+                {
+                    this.chkAutoCert.Checked = false;
+                    this.txtLoginPwd.Enabled = false;
+                    this.txtLoginPwd.Text = "";
+                }
+            }
+        }
+
         // 서버에 인증서 저장
         private void SaveData()
         {
@@ -541,7 +536,6 @@ namespace Mcc.Clinic.Common.D._POPUP
                 return;
             }
         }
-        #endregion
 
         // 자동로그인(암호저장)
         private void SaveAutoLogin()
@@ -555,33 +549,26 @@ namespace Mcc.Clinic.Common.D._POPUP
                 return;
             }
             
-            try
+            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
+            sMsg.SqlStatement = @"update filesystem.certificate_hosp set cn	= @cn ,	password = @password 
+                                  where hosp_cd = @hosp_cd and gb = '1'";
+
+            sMsg.AddParameter("hosp_cd", cbxHosp.SelectedValue.ToString());
+
+            if (chkAutoCert.Checked)
             {
-                Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
-                sMsg.SqlStatement = @"update filesystem.certificate_hosp set cn	= @cn ,	password = @password 
-                                    where hosp_cd = @hosp_cd and gb = '1'";
-
-                sMsg.AddParameter("hosp_cd", cbxHosp.SelectedValue.ToString());
-
-                if (chkAutoCert.Checked)
-                {
-                    sMsg.AddParameter("cn", fileNM);
-                    sMsg.AddParameter("password", Encrypt(txtLoginPwd.Text, "eghis123"));
-                }
-                else
-                {
-                    txtLoginPwd.Text = "";
-                    sMsg.AddParameter("cn", null);
-                    sMsg.AddParameter("password", null);
-                }
-                this.ExecuteNonQuery(sMsg);
-                
-                MessageBox.Show("자동로그인 설정 변경이 완료되었습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                sMsg.AddParameter("cn", fileNM);
+                sMsg.AddParameter("password", Encrypt(txtLoginPwd.Text, "eghis123"));
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show("저장 중 오류가 발생되었습니다. \n" + e.ToString(), "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+                txtLoginPwd.Text = "";
+                sMsg.AddParameter("cn", null);
+                sMsg.AddParameter("password", null);
+            }
+            this.ExecuteNonQuery(sMsg);
+            
+            MessageBox.Show("자동로그인 설정 변경이 완료되었습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);             
         }
         
 
@@ -780,6 +767,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             return Encoding.UTF8.GetString(ms.GetBuffer());
         }
 
+        //관리자 권한
         private bool IsAdministrator()
         {
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
@@ -791,7 +779,6 @@ namespace Mcc.Clinic.Common.D._POPUP
             return false;
         }
 
-      
-        
+        #endregion
     }
 }
