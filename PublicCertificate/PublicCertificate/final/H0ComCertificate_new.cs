@@ -164,32 +164,35 @@ namespace Mcc.Clinic.Common.D._POPUP
 
              if (fullPath.Contains("cn="))
              {
-                 string[] fileNm = fb.SelectedPath.Split('=');
+                string[] fileNm = fb.SelectedPath.Split('=');
 
-                 string szSignCertFile = fb.SelectedPath + @"\signCert.der";
-                 X509Certificate2 cert = new X509Certificate2(szSignCertFile);
+                string szSignCertFile = fb.SelectedPath + @"\signCert.der";
+                X509Certificate2 cert = new X509Certificate2(szSignCertFile);
 
-                 string sDate = cert.NotBefore.ToString("yyyy-MM-dd");
-                 string eDate = cert.NotAfter.ToString("yyyy-MM-dd");
+                string sDate = cert.NotBefore.ToString("yyyy-MM-dd");
+                string eDate = cert.NotAfter.ToString("yyyy-MM-dd");
 
-                 if (grdPcCert.Rows.Count > 0)
-                 {
-                     dt = grdPcCert.DataSource as DataTable;
+                if (grdPcCert.Rows.Count > 0)
+                {
 
-                     for (int i = 0; i < dt.Rows.Count; i++)
-                     {
-                         string fileEndDate = grdPcCert.Rows[i].Cells[2].Text;
-                         if(eDate == fileEndDate)
-                         {
-                             MessageBox.Show("이미 보관된 인증서 입니다. 인증서를 다시 선택해주세요!");
-                             return;
-                         }
-                     }
+                   dt = grdPcCert.DataSource as DataTable;
 
-                     dt.Rows.Add(fileNm[1].Substring(0, fileNm[1].Length - 3), sDate, eDate, fullPath);
-                     grdPcCert.FillData(dt);
-                 }
-                 RedText();             
+                   for (int i = 0; i < dt.Rows.Count; i++)
+                   {
+                      string fileEndDate = grdPcCert.Rows[i].Cells[2].Text;
+                      string fileName = grdPcCert.Rows[i].Cells[0].Text;
+
+                      if(eDate == fileEndDate && fileNm[1].Substring(0, fileNm[1].Length - 3) == fileName)
+                      {
+                          MessageBox.Show("이미 보관된 인증서 입니다. 인증서를 다시 선택해주세요!");
+                          return;
+                      }
+                   }
+
+                   dt.Rows.Add(fileNm[1].Substring(0, fileNm[1].Length - 3), sDate, eDate, fullPath);
+                   grdPcCert.FillData(dt);
+                }
+                RedText();             
             }
         }
 
@@ -319,7 +322,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                             w.Write(buf, 0, buf.Length);
                             w.Close();
                         }
-                    }
+                    }       
                     MessageBox.Show("인증서를 내려받았습니다.", "저장완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -359,8 +362,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 }
                 else
                 {
-                    this.txtLoginPwd.Enabled = false;
-                    txtLoginPwd.BackColor = Color.Gainsboro;
+                    this.txtLoginPwd.Enabled = false;                    
                 }                
             }
             else
@@ -397,6 +399,30 @@ namespace Mcc.Clinic.Common.D._POPUP
         #endregion
 
         #region - method -
+        // 요양기관 콤보 채우기
+        private void SetComboItem()
+        {
+            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
+            sMsg.SqlStatement = @"select a.hosp_no, a.hosp_nm, case when a.main_yn = 'Y' then a.hosp_no else '' end as main_hosp_cd
+                                  from hz_mst_hosp a order by main_hosp_cd desc;";
+
+            DataTable dt = this.FillDataSet(sMsg).Tables[0];
+
+            if (dt.Rows.Count > 0)                                                    //요양기관 데이터가 있을 경우
+            {
+                cbxHosp.FillData(dt, "hosp_nm", "hosp_no", AddingItemMode.None);      //일단 요양기관 콤보 채우기
+                
+                if (string.IsNullOrEmpty(dt.Rows[0]["main_hosp_cd"].ToString()))      //대표 요양기관기호로 기본값 불러오기
+                {
+                    cbxHosp.SelectedIndex = 0;
+                }                
+            }
+            else
+            {
+                MessageBox.Show("요양기관에 대한 정보가 없습니다. 병원정보를 등록해주세요");
+            }
+        }
+
         //서버에 저장된 (인증서 + 자동 로그인) 데이터 가져오기
         private void SetData()
         {
@@ -550,7 +576,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
             sMsg.AddParameter("hosp_cd", cbxHosp.SelectedValue.ToString());
 
-            if (chkAutoCert.Checked)
+             if (chkAutoCert.Checked)
             {
                 sMsg.AddParameter("cn", fileNM);
                 sMsg.AddParameter("password", Encrypt(txtLoginPwd.Text, "eghis123"));
@@ -564,42 +590,6 @@ namespace Mcc.Clinic.Common.D._POPUP
             this.ExecuteNonQuery(sMsg);
             
             MessageBox.Show("자동로그인 설정 변경이 완료되었습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);             
-        }
-        
-
-        // 서버 저장된 요양기관들 콤보박스에 보여주기
-        private void SetComboItem()
-        {
-            Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
-            sMsg.SqlStatement = @"select a.hosp_no, a.hosp_nm, case when a.main_yn = 'Y' then a.hosp_no else '' end as main_hosp_cd
-                                  from hz_mst_hosp a order by main_hosp_cd desc;";
-
-            DataTable dt = this.FillDataSet(sMsg).Tables[0];
-                        
-            if (dt.Rows.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(dt.Rows[0]["main_hosp_cd"].ToString()))       //대표 요양기관기호 있을 경우
-                {
-                    cbxHosp.FillData(dt, "hosp_nm", "hosp_no", AddingItemMode.None);
-                }
-                else                                                                    //대표 요양기관기호 없을 경우
-                {
-                    MessageBox.Show("대표 요양기관기호가 설정되지 않아 (『" + dt.Rows[0]["hosp_no"].ToString() + "』" + dt.Rows[0]["hosp_nm"].ToString() + ") 해당 요양기관을 대표 요양기관으로 설정합니다.", "확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    sMsg = new Series.DataBase.DBMessage();
-                    sMsg.SqlStatement = "update hz_mst_hosp a set main_yn = 'Y' where a.hosp_no = @hosp_no";
-                    sMsg.AddParameter("hosp_no", dt.Rows[0]["hosp_no"].ToString());
-                    this.ExecuteNonQuery(sMsg);
-
-                    sMsg.SqlStatement = "select hosp_no, hosp_nm from hz_mst_hosp";
-                    DataTable dtT = this.FillDataSet(sMsg).Tables[0];
-
-                    cbxHosp.FillData(dtT, "hosp_nm", "hosp_no", AddingItemMode.None);                                     
-                }                          
-            }
-            else
-            {
-                MessageBox.Show("요양기관에 대한 정보가 없습니다. 병원정보를 등록해주세요");
-            }
         }
 
         // 내PC 경로에서 인증서 가져오기
@@ -658,15 +648,21 @@ namespace Mcc.Clinic.Common.D._POPUP
             //경로1,경로2 인증서 중복제거
             for(int i=0; i<dt.Rows.Count; i++)
             {
-                string val1 = dt.Rows[i]["end_date"].ToString();
-                for(int j=i+1; j<dt.Rows.Count; j++)
+                string certNm1 = dt.Rows[i]["cert_nm"].ToString();
+                for(int j=i+1; j<dt.Rows.Count; j++)                            //인증서 이름 비교
                 {
-                    string val2 = dt.Rows[j]["end_date"].ToString();
+                    string certNm2 = dt.Rows[j]["cert_nm"].ToString();
 
-                    if(val1 == val2)
-                    {
-                        dt.Rows.Remove(dt.Rows[j]);
-                        j = j - 1;
+                    if(certNm1 == certNm2)                                      //인증서 이름이 같으면
+                    {                        
+                        string endDate1 = dt.Rows[i]["end_date"].ToString();
+                        string endDate2 = dt.Rows[j]["end_date"].ToString();
+
+                        if(endDate1 == endDate2)                                //인증서 만료 날짜 같으면     
+                        {
+                            dt.Rows.Remove(dt.Rows[j]);                         //중복된 두번째 인증서 삭제
+                            j = j - 1;
+                        }
                     }
                 }
             }
@@ -769,6 +765,7 @@ namespace Mcc.Clinic.Common.D._POPUP
             cryStream.FlushFinalBlock();
             return Encoding.UTF8.GetString(ms.GetBuffer());
         }
+        
         #endregion
     }
 }
