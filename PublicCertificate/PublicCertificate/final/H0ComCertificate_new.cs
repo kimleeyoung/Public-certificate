@@ -235,12 +235,6 @@ namespace Mcc.Clinic.Common.D._POPUP
 
         private void BtnDown_Click(object sender, EventArgs e)
         {
-            if (!IsAdministrator())
-            {
-                MessageBox.Show("이지스를 관리자 권한으로 실행하세요", "공동인증서 관리", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
             if (MessageBox.Show("인증서를 받으시겠습니까", "내려받기", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
                 Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();                
@@ -775,19 +769,6 @@ namespace Mcc.Clinic.Common.D._POPUP
             cryStream.FlushFinalBlock();
             return Encoding.UTF8.GetString(ms.GetBuffer());
         }
-
-        //관리자 권한
-        private bool IsAdministrator()
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            if (null != identity)
-            {
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-            return false;
-        }
-
         #endregion
     }
 }
