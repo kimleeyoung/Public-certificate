@@ -5,7 +5,7 @@
 - 내PC 인증서 선택 후 DB에 저장하기
 - DB에 저장된 인증서 내PC로 내려받기
 
-
+# 세부기능
 - 내PC에 인증서 없더라도 DB에 인증서 저장되어 있으면 내PC로 내려받기 가능
 - 만료되거나 유효기간30일 이내인 인증서 빨간색 표시
 - 만료된 인증서 선택 후 DB등록 시 등록불가 메시지 창 뜨기
@@ -32,7 +32,7 @@
 
 ![image](https://user-images.githubusercontent.com/65011438/168526428-2a42c193-86f0-4c1a-9374-55a559942f7c.png)
 
-[거의 최종]
+# 최종UI
 
 ![image](https://user-images.githubusercontent.com/65011438/169984767-25ef5f2f-c3a9-4b58-addf-7a530d4f1ce6.png)
 
