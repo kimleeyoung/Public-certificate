@@ -33,9 +33,6 @@ namespace Mcc.Clinic.Common.TEST
 
             this.Load += new EventHandler(test05_Load);
             this.FormClosing += new FormClosingEventHandler(test05_FormClosing);
-
-            this.cbxPtntDept.SelectedValueChanged += CbxPtntDept_SelectedValueChanged;
-
         }
         
         #endregion
@@ -197,8 +194,7 @@ namespace Mcc.Clinic.Common.TEST
         }
 
         private void InserData()
-        {
-            DataTable dt = new DataTable();
+        {            
             DBMessage msg = new DBMessage();
             msg.SqlStatement = @"INSERT INTO public.hz_mst_ptnt_test
                                  (ptnt_no, ptnt_nm, addr, att_dept)
@@ -209,27 +205,17 @@ namespace Mcc.Clinic.Common.TEST
             msg.AddParameter("addr", txtPtntAddr.Text);
             msg.AddParameter("att_dept", cbxPtntDept.SelectedValue.ToString());
 
-            this.ExecuteNonQuery(msg);
-            dt = this.FillDataSet(msg).Tables[0];
-
-            if(dt.Rows.Count > 0)
-            {
-                grdPtnt.FillData(dt);
-            }
+            this.ExecuteNonQuery(msg);            
         }
         private void GetData()
         {
-
-        }
-
-        private void CbxPtntDept_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (cbxPtntDept.SelectedValue == null) return;
-
-            if (((Control)sender).Visible)
-            {
-
-            }
+            DataTable dt = new DataTable();
+            DBMessage msg = new DBMessage();
+            msg.SqlStatement = @"select * from hz_mst_ptnt_test";
+            dt = this.FillDataSet(msg).Tables[0];
+            
+            if(dt.Rows.Count > 0){
+            grdPtnt.FillData(dt);
         }
     }
 }
