@@ -13,7 +13,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Infragistics.Win.UltraWinGrid;
-
+using Mcc.Series.DataBase;
 
 namespace Mcc.Clinic.Common.D._POPUP
 {
@@ -251,6 +251,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
                     foreach (DataRow dr in dt.Rows)
                     {
+                        // gb=1인 Row 데이터를 path1,2에 내려받음
                         if (dr["gb"].ToString().Equals("1"))
                         {
                             path1 = "C:\\Users\\" + Environment.UserName.ToString() + "\\AppData\\LocalLow\\NPKI\\KICA\\USER\\" + dr["file_nm"].ToString();
@@ -258,7 +259,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
                             // ==================================================== 경로1 ==================================================================== //
                             DirectoryInfo dir = new DirectoryInfo(path1);
-                            if (dir.Exists) //경로 안에 서버에 저장된 인증서와 이름이 같은 인증서가 있다면 백업파일을 만든다
+                            if (dir.Exists)
                             {
                                 if (MessageBox.Show("동일한 이름의 인증서가 존재합니다. 덮어쓰시겠습니까?" + global.Enter + "(인증서가 만료되어 갱신하신 경우에도 이 메시지를 보실수 있습니다.)", "확인", MessageBoxButtons.YesNo, MessageBoxIcon.Information) != DialogResult.Yes)
                                     return;
@@ -266,7 +267,6 @@ namespace Mcc.Clinic.Common.D._POPUP
                                 string backup_path = "C:\\Users\\" + Environment.UserName.ToString() + "\\AppData\\LocalLow\\NPKI\\KICA\\USER\\" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + "\\" + dr["file_nm"].ToString();
                                 Directory.CreateDirectory(backup_path);
 
-                                //경로1 인증서 file 저장
                                 FileInfo[] files = dir.GetFiles();
                                 foreach (FileInfo file in files)
                                 {
@@ -276,7 +276,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                                     }
                                 }
                             }
-                            else      //이름이 같은 인증서가 없다면 새로 디렉토리를 만든다.
+                            else
                             {
                                 dir.Create();
                             }
@@ -302,20 +302,15 @@ namespace Mcc.Clinic.Common.D._POPUP
                                 dir.Create();
                             }
                         }
-                        else  //gb=2인 파일들 path1,2에 내려받음
+                        else  // gb=2인 파일들 path1,2에 내려받음
                         {
                             if (dr["file_nm"].ToString().Contains(".txt")) continue;
-                            FileStream fs = new FileStream(path1 + "\\" + dr["file_nm"].ToString(), FileMode.Create);
-                            BinaryWriter w = new BinaryWriter(fs);
-                            byte[] buf = dr["file"] as byte[];
-                            w.Write(buf, 0, buf.Length);
-                            w.Close();
+                            
+                            byte[] buf1 = dr["file"] as byte[];
+                            File.WriteAllBytes(path1 + "\\" + dr["file_nm"].ToString(), buf1);
 
-                            fs = new FileStream(path2 + "\\" + dr["file_nm"].ToString(), FileMode.Create);
-                            w = new BinaryWriter(fs);
-                            buf = dr["file"] as byte[];
-                            w.Write(buf, 0, buf.Length);
-                            w.Close();
+                            byte[] buf2 = dr["file"] as byte[];
+                            File.WriteAllBytes(path2 + "\\" + dr["file_nm"].ToString(), buf2);
                         }
                     }
                     MessageBox.Show("인증서를 내려받았습니다.", "저장완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -423,48 +418,52 @@ namespace Mcc.Clinic.Common.D._POPUP
         private void SetData()
         {
             Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
-            sMsg.SqlStatement = $@"select * from filesystem.certificate_hosp a
-                                   where a.gb = '1' and a.hosp_cd = @hosp_no";
+            sMsg.SqlStatement = $@"select * from filesystem.certificate_hosp where hosp_cd = @hosp_no order by gb";
             sMsg.AddParameter("hosp_no", cbxHosp.SelectedValue.ToString());
 
             DataTable dt = this.FillDataSet(sMsg).Tables[0];
-
+            
             if (dt.Rows.Count > 0)
             {
-                //서버에 저장된 인증서
-                string[] cbxCertNm = dt.Rows[0]["file_nm"].ToString().Split('=');
+                string[] cbxCertNm = new string[10];
+                string sDate = string.Empty;
+                string eDate = string.Empty;
 
                 DataTable dtT = new DataTable();
                 dtT.Columns.Add("cert_nm");
                 dtT.Columns.Add("start_date");
                 dtT.Columns.Add("end_date");
 
-                Mcc.Series.DataBase.DBMessage ssMsg = new Mcc.Series.DataBase.DBMessage();
-                ssMsg.SqlStatement = $@"select * from filesystem.certificate_hosp 
-                                            where gb = '2' and file_nm = 'signCert.der' and hosp_cd = @hosp_no";
-                ssMsg.AddParameter("hosp_no", cbxHosp.SelectedValue.ToString());
-
-                DataTable dtS = this.FillDataSet(ssMsg).Tables[0];
-
-                if (dtS.Rows.Count > 0)
+                //서버에 저장된 인증서 데이터 가져오기
+                foreach (DataRow dr in dt.Rows)
                 {
-                    byte[] buf = dtS.Rows[0]["file"] as byte[];
-                    X509Certificate2 cert = new X509Certificate2(buf);
+                    if (dr["gb"].ToString().Equals("1"))
+                    {
+                        cbxCertNm = dt.Rows[0]["file_nm"].ToString().Split('=');
+                    }
+                    else
+                    {
+                        if (dr["file_nm"].ToString().Equals("signCert.der"))
+                        {                            
+                            byte[] buf = dr["file"] as byte[];
+                            X509Certificate2 cert = new X509Certificate2(buf);
 
-                    string sDate = cert.NotBefore.ToString("yyyy-MM-dd");
-                    string eDate = cert.NotAfter.ToString("yyyy-MM-dd");
+                            sDate = cert.NotBefore.ToString("yyyy-MM-dd");
+                            eDate = cert.NotAfter.ToString("yyyy-MM-dd");
+                        }
+                    }
+                    
+                }            
+                dtT.Rows.Add(cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3), sDate, eDate);
 
-                    dtT.Rows.Add(cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3), sDate, eDate);
-
-                    grdDbCert1.FillData(dtT);
-                    grdDbCert2.FillData(dtT);
-                    grdDbCert3.FillData(dtT);
-
-                    lblCertInfo.Text = "[ " + cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3) + " ]" +
+                grdDbCert1.FillData(dtT);
+                grdDbCert2.FillData(dtT);
+                grdDbCert3.FillData(dtT);
+                
+                lblCertInfo.Text = "[ " + cbxCertNm[1].Substring(0, cbxCertNm[1].Length - 3) + " ]" +
                     Environment.NewLine + "[ " + dtT.Rows[0]["end_date"].ToString() + " ]";
-                }
-
-                // 자동로그인 데이터
+            
+                // 서버에 저장된 자동로그인 데이터 가져오기
                 if (!string.IsNullOrEmpty(dt.Rows[0]["cn"].ToString()))
                 {
                     this.chkAutoCert.Checked = true;
@@ -479,8 +478,7 @@ namespace Mcc.Clinic.Common.D._POPUP
                 }
             }
         }
-
-        //===================================================== foreach문에서 오류찾기 ================================================//
+        
         // 서버에 인증서 저장
         private void SaveData()
         {
@@ -666,7 +664,7 @@ namespace Mcc.Clinic.Common.D._POPUP
 
             sDate = cert.NotBefore.ToString("yyyy-MM-dd");
             eDate = cert.NotAfter.ToString("yyyy-MM-dd");
-        }
+        }    
 
         // 만료일자 기준 빨간색 처리
         private void RedText() 
