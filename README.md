@@ -16,15 +16,12 @@
 
 
 # UI 변천사
+
 ![image](https://user-images.githubusercontent.com/65011438/170907429-2ed1af42-65b1-44c0-9ec7-88f4c782b2d6.png)
+
+
 
 
 # 최종 UI
 
-![image](https://user-images.githubusercontent.com/65011438/169984767-25ef5f2f-c3a9-4b58-addf-7a530d4f1ce6.png)
-
-
-![image](https://user-images.githubusercontent.com/65011438/169984781-13ff5021-0e63-4cb5-a8ee-71f7c0a37256.png)
-
-
-![image](https://user-images.githubusercontent.com/65011438/169984812-ddd88b74-8bb5-4416-a5c6-ae1e298b0282.png)
+![image](https://user-images.githubusercontent.com/65011438/170907715-6975da3f-4b69-46cc-b74b-e42d618be4af.png)
