@@ -207,6 +207,7 @@ namespace Mcc.Clinic.Common.TEST
 
             this.ExecuteNonQuery(msg);            
         }
+        
         private void GetData()
         {
             DataTable dt = new DataTable();
@@ -216,6 +217,18 @@ namespace Mcc.Clinic.Common.TEST
             
             if(dt.Rows.Count > 0){
             grdPtnt.FillData(dt);
+        }
+        
+        private void ListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(ListView.SelectedItems.Count > 0)
+            {
+                txtName.Text = ListView.SelectedItems[0].SubItems[0].Text;
+                txtPhone.Text = ListView.SelectedItems[0].SubItems[1].Text;
+                txtSecurityNum.Text = ListView.SelectedItems[0].SubItems[2].Text;
+                txtAddress.Text = ListView.SelectedItems[0].SubItems[3].Text;
+                txtSym.Text = ListView.SelectedItems[0].SubItems[4].Text;
+            }
         }
     }
 }
