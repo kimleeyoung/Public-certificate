@@ -15,24 +15,12 @@
 
 
 
-# 화면
-![image](https://user-images.githubusercontent.com/65011438/167378303-b4eb2fde-797f-4791-896c-8055b3ff117b.png)
-
-
-![image](https://user-images.githubusercontent.com/65011438/167792690-997b1930-4662-40f3-985c-e3fec0d1f2cb.png)
+# UI 변천사
+![image](https://user-images.githubusercontent.com/65011438/170907327-7faf9cc7-dd4b-494c-9f02-7adf5b36edb3.png)
 
 
 
-![image](https://user-images.githubusercontent.com/65011438/167792839-0542c49b-b293-483e-862f-554216624950.png)
-
-
-
-![image](https://user-images.githubusercontent.com/65011438/168021413-37029493-e45e-4b58-933b-a90e50e71831.png)
-
-
-![image](https://user-images.githubusercontent.com/65011438/168526428-2a42c193-86f0-4c1a-9374-55a559942f7c.png)
-
-# 최종UI
+# 최종 UI
 
 ![image](https://user-images.githubusercontent.com/65011438/169984767-25ef5f2f-c3a9-4b58-addf-7a530d4f1ce6.png)
 
