@@ -16,8 +16,7 @@
 
 
 # UI 변천사
-![image](https://user-images.githubusercontent.com/65011438/170907327-7faf9cc7-dd4b-494c-9f02-7adf5b36edb3.png)
-
+![image](https://user-images.githubusercontent.com/65011438/170907429-2ed1af42-65b1-44c0-9ec7-88f4c782b2d6.png)
 
 
 # 최종 UI
