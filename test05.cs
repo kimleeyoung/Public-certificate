@@ -1,6 +1,4 @@
-//test 피드백 아직..
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +10,8 @@ using Mcc.Series.Ui.Type;
 using Mcc.Series.Controls.Enum;
 using Mcc.Series.Common.Enum;
 using Mcc.Series.DataBase;
+using Mcc.Series.Controls;
+using Mcc.Series.Ui.PopUp;
 
 namespace Mcc.Clinic.Common.TEST
 {
@@ -35,8 +35,15 @@ namespace Mcc.Clinic.Common.TEST
 
             this.Load += new EventHandler(test05_Load);
             this.FormClosing += new FormClosingEventHandler(test05_FormClosing);
+                   
+            this.btnSave.Click += BtnSave_Click;                            //환자정보 저장 및 수정내용 저장
+            this.btnDelete.Click += BtnDelete_Click;                        //환자데이터 삭제
+            this.btnReceipt.Click += BtnReceipt_Click;                      //환자접수
+            this.grdPtnt.DoubleClick += GrdPtnt_DoubleClick;                //환자정보 수정
+            this.txtPtntAddr.KeyPress += TxtAddr_KeyPress;                  //주소입력
+            this.txtPtntAddr.SearchButton.Click += SearchButton_Click;      //주소검색            
+            this.Text = "환자등록";            
         }
-        
         #endregion
 
         #region - form events / SetInitialize -
@@ -48,6 +55,7 @@ namespace Mcc.Clinic.Common.TEST
                 this.SetInitialize();
                 this.SetGridHeader();
                 setCombo();
+                GetData();                
             }
             catch (Exception ex)
             {
@@ -78,100 +86,120 @@ namespace Mcc.Clinic.Common.TEST
         private void SetGridHeader()
         {
             grdPtnt.AddColumn("ptnt_no", "환자번호", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPtnt.AddColumn("ptnt_nm", "환자명", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPtnt.AddColumn("addr", "주소", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPtnt.AddColumn("att_dept", "진료과", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPtnt.AddColumn("ptnt_nm", "환자이름", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPtnt.AddColumn("addr", "환자주소", 300, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);            
+            grdPtnt.AddColumn("att_dept", "진료과", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdPtnt.SetGridHeader();
-            //grdPtnt.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
+            grdPtnt.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
         }
         #endregion
 
-        #region - top button events -
-        protected override void btnbaseF5_Click()
+        #region - event-
+        private void BtnSave_Click(object sender, EventArgs e)
         {
-            base.btnbaseF5_Click();
-
-            try
+            if (txtPtntNo.Text.Equals("") || txtPtntNm.Text.Equals("") || txtPtntAddr.Text.Equals(""))
             {
-                // To Do..
+                MessageBox.Show("모두 작성 후 저장해주세요.");
+                return;
             }
-            catch (Exception ex)
+
+            if (txtPtntNo.Enabled == false)
             {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (MessageBox.Show("입력한 데이터로 수정하시겠습니까?", "수정", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    UpdateData();
+                    GetData();
+                    Clear();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                foreach (var row in grdPtnt.Rows)
+                {
+                    string ptntNo = row.Cells["ptnt_no"].Value.ToString();
+
+                    if (txtPtntNo.Text == ptntNo)
+                    {
+                        MessageBox.Show("이미 등록된 동일한 환자입니다.");
+                        Clear();
+                        return;
+                    }
+                }
+                InsertData();
+                GetData();
+                Clear();
             }
         }
 
-        protected override void btnbaseF6_Click()
+        private void BtnDelete_Click(object sender, EventArgs e)
         {
-            base.btnbaseF6_Click();
+            if (MessageBox.Show("환자 데이터를 정말로 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                DeleteData();
+                GetData();
+                Clear();
+            }                
+        }
 
-            try
+        private void BtnReceipt_Click(object sender, EventArgs e)
+        {
+            if(MessageBox.Show("접수 하시겠습니까?","접수", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                // To Do..
-            }
-            catch (Exception ex)
+                DBMessage msg = new DBMessage();
+                msg.SqlStatement = @"INSERT INTO public.h1opdin_test (recept_no, ptnt_no, clinic_ymd, clinic_time)
+                                 VALUES((select ifnull(max(recept_no::integer) + 1, 1) from h1opdin_test), @ptnt_no, @clinic_ymd, @clinic_time); ";
+
+                msg.AddParameter("ptnt_no", txtPtntNo.Text);
+                msg.AddParameter("clinic_ymd", DateTime.Now.ToString("yyyyMMdd"));
+                msg.AddParameter("clinic_time", DateTime.Now.ToString("hh:mm"));
+
+                this.ExecuteNonQuery(msg);
+
+                MessageBox.Show("접수되었습니다");
+            }      
+                           
+        }
+
+        private void GrdPtnt_DoubleClick(object sender, EventArgs e)
+        {
+            if (grdPtnt.Rows.Count > 0)
             {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPtntNo.Text = grdPtnt.ActiveRow.Cells["ptnt_no"].Value.ToString();
+                txtPtntNo.Enabled = false;
+                txtPtntNm.Text = grdPtnt.ActiveRow.Cells["ptnt_nm"].Value.ToString();
+                txtPtntAddr.Text = grdPtnt.ActiveRow.Cells["addr"].Value.ToString();
+                cbxPtntDept.Text = grdPtnt.ActiveRow.Cells["att_dept"].Value.ToString();
             }
         }
 
-        protected override void btnbaseF7_Click()
+        private void TxtAddr_KeyPress(object sender, KeyPressEventArgs e)
         {
-            base.btnbaseF7_Click();
-
-            try
+            if (e.KeyChar == (char)Keys.Enter)
             {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.SearchButton_Click(sender, e);
             }
         }
 
-        protected override void btnbaseF8_Click()
+        private void SearchButton_Click(object sender, EventArgs e)
         {
-            base.btnbaseF8_Click();
+            if (string.IsNullOrEmpty(txtPtntAddr.Text)) return;
+            
+            AddressSearchNew addr = new AddressSearchNew(txtPtntAddr.Text);
+            addr.StartPosition = FormStartPosition.CenterParent;
 
-            try
+            if (addr.ShowDialog() == DialogResult.OK)
             {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPtntAddr.Text = (addr.StreetDetail + " " + addr.Street).Trim();
             }
         }
 
-        protected override void btnbaseF9_Click()
-        {
-            base.btnbaseF9_Click();
-
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        protected override void btnbaseF10_Click()
-        {
-            base.btnbaseF10_Click();
-
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
 
+        #region - method -        
         private void setCombo()
         {
             Mcc.Series.DataBase.DBMessage sMsg = new Mcc.Series.DataBase.DBMessage();
@@ -179,9 +207,9 @@ namespace Mcc.Clinic.Common.TEST
 
             DataTable dt = this.FillDataSet(sMsg).Tables[0];
 
-            if (dt.Rows.Count > 0)                                                    
+            if (dt.Rows.Count > 0)
             {
-                cbxPtntDept.FillData(dt, "dept_nm", "dept_cd", AddingItemMode.None);                      
+                cbxPtntDept.FillData(dt, "dept_nm", "dept_cd", AddingItemMode.None);
             }
             else
             {
@@ -189,48 +217,66 @@ namespace Mcc.Clinic.Common.TEST
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void UpdateData()
         {
-            InserData();
-            GetData();
-        }
-
-        private void InserData()
-        {            
             DBMessage msg = new DBMessage();
-            msg.SqlStatement = @"INSERT INTO public.hz_mst_ptnt_test
-                                 (ptnt_no, ptnt_nm, addr, att_dept)
-                                 VALUES(@ptnt_no, @ptnt_nm, @addr, @att_dept);";
+            msg.SqlStatement = @"UPDATE public.hz_mst_ptnt_test
+                                 SET ptnt_nm = @ptnt_nm, addr = @addr, att_dept = @att_dept
+                                 WHERE ptnt_no = @ptnt_no;";
 
             msg.AddParameter("ptnt_no", txtPtntNo.Text);
             msg.AddParameter("ptnt_nm", txtPtntNm.Text);
             msg.AddParameter("addr", txtPtntAddr.Text);
             msg.AddParameter("att_dept", cbxPtntDept.SelectedValue.ToString());
-
-            this.ExecuteNonQuery(msg);            
+            
+            this.ExecuteNonQuery(msg);
         }
-        
+
+        private void InsertData()
+        {
+            DBMessage msg = new DBMessage();
+               
+            msg.SqlStatement = $@"INSERT INTO public.hz_mst_ptnt_test
+                             (ptnt_no, ptnt_nm, addr, att_dept)
+                             VALUES(@ptnt_no, @ptnt_nm, @addr, @att_dept);";
+
+            msg.AddParameter("ptnt_no", txtPtntNo.Text);
+            msg.AddParameter("ptnt_nm", txtPtntNm.Text);
+            msg.AddParameter("addr", txtPtntAddr.Text);
+            msg.AddParameter("att_dept", cbxPtntDept.SelectedValue.ToString());                
+                        
+            this.ExecuteNonQuery(msg);
+        }
+
+        private void DeleteData()
+        {
+            DBMessage msg = new DBMessage();
+            msg.SqlStatement = $@"DELETE FROM public.hz_mst_ptnt_test WHERE ptnt_no = @ptnt_no";
+            msg.AddParameter("ptnt_no", txtPtntNo.Text);
+
+            this.ExecuteNonQuery(msg);
+        }
+
         private void GetData()
         {
             DataTable dt = new DataTable();
             DBMessage msg = new DBMessage();
-            msg.SqlStatement = @"select * from hz_mst_ptnt_test";
-            dt = this.FillDataSet(msg).Tables[0];
-            
-            if(dt.Rows.Count > 0){
-            grdPtnt.FillData(dt);
+            msg.SqlStatement = @"select a.ptnt_no, a.ptnt_nm, a.addr, b.dept_nm as att_dept 
+                                 from hz_mst_ptnt_test a, hz_mst_dept_test b 
+                                 where a.att_dept = b.dept_cd order by a.ptnt_no;";
+
+            dt = this.FillDataSet(msg).Tables[0];             
+            grdPtnt.FillData(dt);            
         }
-        
-        private void ListView_MouseDoubleClick(object sender, MouseEventArgs e)
+
+        private void Clear()
         {
-            if(ListView.SelectedItems.Count > 0)
-            {
-                txtName.Text = ListView.SelectedItems[0].SubItems[0].Text;
-                txtPhone.Text = ListView.SelectedItems[0].SubItems[1].Text;
-                txtSecurityNum.Text = ListView.SelectedItems[0].SubItems[2].Text;
-                txtAddress.Text = ListView.SelectedItems[0].SubItems[3].Text;
-                txtSym.Text = ListView.SelectedItems[0].SubItems[4].Text;
-            }
+            txtPtntNo.Clear();
+            txtPtntNm.Clear();
+            txtPtntAddr.Text = "";
+            cbxPtntDept.SelectedIndex = 0;
+            txtPtntNo.Enabled = true;            
         }
+        #endregion
     }
 }
