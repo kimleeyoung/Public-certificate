@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Mcc.Series.Ui.Type;
 using Mcc.Series.Controls.Enum;
 using Mcc.Series.Common.Enum;
+using Mcc.Series.DataBase;
 
 namespace Mcc.Clinic.Common.TEST
 {
@@ -24,10 +25,33 @@ namespace Mcc.Clinic.Common.TEST
             InitializeComponent();
 
             this.SetBaseButtonHide(new EnumBaseButtonChoose[] { EnumBaseButtonChoose.btnbaseF9
+                                                              , EnumBaseButtonChoose.btnbaseF10
+                                                              , EnumBaseButtonChoose.btnbaseF5
+                                                              , EnumBaseButtonChoose.btnbaseF6
+                                                              , EnumBaseButtonChoose.btnbaseF7
+                                                              , EnumBaseButtonChoose.btnbaseF8
                                                               , EnumBaseButtonChoose.btnbaseF10 });
-
+            this.Text = "환자정보";
             this.Load += new EventHandler(test06_Load);
             this.FormClosing += new FormClosingEventHandler(test06_FormClosing);
+
+            this.grdReceipt.DoubleClickRow += GrdReceipt_DoubleClickRow;
+            this.btnSave.Click += BtnSave_Click;
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (!lblPtntInfo.Text.Equals("환자정보:") && !txtSymp.Text.Equals(""))
+            {
+                string[] str = lblPtntInfo.Text.Split('-');
+
+                DBMessage msg = new DBMessage();
+                msg.SqlStatement = @"UPDATE public.h1opdin_test SET symp_txt=@symp_txt WHERE recept_no=@recept_no;";
+
+                msg.AddParameter("symp_txt", txtSymp.Text);
+                msg.AddParameter("recept_no", str[1].Substring(0, 1).ToString());
+                this.ExecuteNonQuery(msg);
+            }
         }
         #endregion
 
@@ -39,6 +63,7 @@ namespace Mcc.Clinic.Common.TEST
                 // To Do..
                 this.SetInitialize();
                 this.SetGridHeader();
+                GetData();
             }
             catch (Exception ex)
             {
@@ -63,99 +88,65 @@ namespace Mcc.Clinic.Common.TEST
         private void SetInitialize()
         {
             // To Do..
-            // lblbasetitle.Text = "";
+            lblbasetitle.Text = "진료화면";
         }
 
         private void SetGridHeader()
         {
-            // To Do..	
+            #region 접수대기 리스트
+            grdReceipt.AddColumn("recept_no", "접수번호", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("ptnt_nm", "환자명", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("clinic_ymd", "진료일자", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("clinic_time", "진료시간", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.SetGridHeader();
+            grdReceipt.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
+            #endregion
+
+            #region 환자처방 리스트
+            grdOrder.AddColumn("recept_no", "접수번호", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdOrder.AddColumn("user_cd", "코드", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("user_nm", "코드명", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("qty", "분량", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdOrder.AddColumn("divide", "몇번에나눠", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdOrder.AddColumn("day", "처방날짜", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdOrder.SetGridHeader();
+            grdOrder.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
+            #endregion
         }
         #endregion
 
-        #region - top button events -
-        protected override void btnbaseF5_Click()
+        private void GrdReceipt_DoubleClickRow(object sender, Infragistics.Win.UltraWinGrid.DoubleClickRowEventArgs e)
         {
-            base.btnbaseF5_Click();
-
-            try
+            if (grdReceipt.ActiveRow != null)
             {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblPtntInfo.Text = "환자정보: 접수번호-" + grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString()
+                    + "/ 환자명-" + grdReceipt.ActiveRow.Cells["ptnt_nm"].Value.ToString();
             }
         }
 
-        protected override void btnbaseF6_Click()
+        private void GetData()
         {
-            base.btnbaseF6_Click();
+            #region 접수대기
+            DataTable dt = new DataTable();
+            DBMessage msg = new DBMessage();
+            msg.SqlStatement = @"select a.recept_no, b.ptnt_nm, a.clinic_ymd, a.clinic_time 
+                                 from h1opdin_test a, hz_mst_ptnt_test b
+                                 where a.ptnt_no = b.ptnt_no ;";
 
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            dt = this.FillDataSet(msg).Tables[0];
+            grdReceipt.FillData(dt);
+            #endregion
+
+            #region 처방
+            DataTable dtS = new DataTable();
+            DBMessage smsg = new DBMessage();
+            smsg.SqlStatement = @"select * from h2opd_doct_ord_test;";
+
+            dtS = this.FillDataSet(smsg).Tables[0];
+            grdOrder.FillData(dtS);
+            #endregion
         }
 
-        protected override void btnbaseF7_Click()
-        {
-            base.btnbaseF7_Click();
 
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        protected override void btnbaseF8_Click()
-        {
-            base.btnbaseF8_Click();
-
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        protected override void btnbaseF9_Click()
-        {
-            base.btnbaseF9_Click();
-
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        protected override void btnbaseF10_Click()
-        {
-            base.btnbaseF10_Click();
-
-            try
-            {
-                // To Do..
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "에러", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
     }
 }
