@@ -39,9 +39,10 @@ namespace Mcc.Clinic.Common.TEST
             this.btnSave.Click += BtnSave_Click;                            //환자정보 저장 및 수정내용 저장
             this.btnDelete.Click += BtnDelete_Click;                        //환자데이터 삭제
             this.btnReceipt.Click += BtnReceipt_Click;                      //환자접수
+            this.icnClear.Click += IcnClear_Click;                          //텍스트박스 클리어
             this.grdPtnt.DoubleClick += GrdPtnt_DoubleClick;                //환자정보 수정
             this.txtPtntAddr.KeyPress += TxtAddr_KeyPress;                  //주소입력
-            this.txtPtntAddr.SearchButton.Click += SearchButton_Click;      //주소검색            
+            this.txtPtntAddr.SearchButton.Click += SearchButton_Click;      //주소검색               
             this.Text = "환자등록";            
         }
         #endregion
@@ -55,7 +56,8 @@ namespace Mcc.Clinic.Common.TEST
                 this.SetInitialize();
                 this.SetGridHeader();
                 setCombo();
-                GetData();                
+                GetPtntData();
+                GetOrderData();
             }
             catch (Exception ex)
             {
@@ -85,12 +87,21 @@ namespace Mcc.Clinic.Common.TEST
 
         private void SetGridHeader()
         {
-            grdPtnt.AddColumn("ptnt_no", "환자번호", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPtnt.AddColumn("ptnt_nm", "환자이름", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdPtnt.AddColumn("addr", "환자주소", 300, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);            
-            grdPtnt.AddColumn("att_dept", "진료과", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPtnt.AddColumn("ptnt_no", "환자번호", 60, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPtnt.AddColumn("ptnt_nm", "환자이름", 60, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdPtnt.AddColumn("addr", "환자주소", 200, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);            
+            grdPtnt.AddColumn("att_dept", "진료과", 60, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
             grdPtnt.SetGridHeader();
             grdPtnt.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
+
+
+            grdReceipt.AddColumn("recept_no", "접수번호", 60, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("ptnt_nm", "환자명", 60, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("clinic_ymd", "진료일자", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("clinic_time", "진료시간", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.AddColumn("symp_txt", "증상", 100, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdReceipt.SetGridHeader();
+            grdReceipt.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ExtendLastColumn;
         }
         #endregion
 
@@ -108,7 +119,7 @@ namespace Mcc.Clinic.Common.TEST
                 if (MessageBox.Show("입력한 데이터로 수정하시겠습니까?", "수정", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     UpdateData();
-                    GetData();
+                    GetPtntData();
                     Clear();
                 }
                 else
@@ -130,7 +141,7 @@ namespace Mcc.Clinic.Common.TEST
                     }
                 }
                 InsertData();
-                GetData();
+                GetPtntData();
                 Clear();
             }
         }
@@ -140,7 +151,7 @@ namespace Mcc.Clinic.Common.TEST
             if (MessageBox.Show("환자 데이터를 정말로 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 DeleteData();
-                GetData();
+                GetPtntData();
                 Clear();
             }                
         }
@@ -149,19 +160,25 @@ namespace Mcc.Clinic.Common.TEST
         {
             if(MessageBox.Show("접수 하시겠습니까?","접수", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                DBMessage msg = new DBMessage();
-                msg.SqlStatement = @"INSERT INTO public.h1opdin_test (recept_no, ptnt_no, clinic_ymd, clinic_time)
-                                 VALUES((select ifnull(max(recept_no::integer) + 1, 1) from h1opdin_test), @ptnt_no, @clinic_ymd, @clinic_time); ";
+                if(grdPtnt.ActiveRow != null)
+                {
+                    DBMessage msg = new DBMessage();
+                    msg.SqlStatement = @"INSERT INTO public.h1opdin_test (recept_no, ptnt_no, clinic_ymd, clinic_time)
+                                     VALUES((select ifnull(max(recept_no::integer) + 1, 1) from h1opdin_test)
+                                     , @ptnt_no, to_char(now(), 'yyyyMMDD'), to_char(now(), 'HH24:MI')); ";
+                    msg.AddParameter("ptnt_no", grdPtnt.ActiveRow.Cells["ptnt_no"].Value.ToString());
+                    this.ExecuteNonQuery(msg);
 
-                msg.AddParameter("ptnt_no", txtPtntNo.Text);
-                msg.AddParameter("clinic_ymd", DateTime.Now.ToString("yyyyMMdd"));
-                msg.AddParameter("clinic_time", DateTime.Now.ToString("hh:mm"));
-
-                this.ExecuteNonQuery(msg);
-
+                    GetOrderData();
+                }
                 MessageBox.Show("접수되었습니다");
             }      
                            
+        }
+
+        private void IcnClear_Click(object sender, EventArgs e)
+        {
+            Clear();
         }
 
         private void GrdPtnt_DoubleClick(object sender, EventArgs e)
@@ -257,7 +274,7 @@ namespace Mcc.Clinic.Common.TEST
             this.ExecuteNonQuery(msg);
         }
 
-        private void GetData()
+        private void GetPtntData()
         {
             DataTable dt = new DataTable();
             DBMessage msg = new DBMessage();
@@ -266,7 +283,20 @@ namespace Mcc.Clinic.Common.TEST
                                  where a.att_dept = b.dept_cd order by a.ptnt_no;";
 
             dt = this.FillDataSet(msg).Tables[0];             
-            grdPtnt.FillData(dt);            
+            grdPtnt.FillData(dt);
+            
+        }
+
+        private void GetOrderData()
+        {
+            DataTable dt = new DataTable();
+            DBMessage msg = new DBMessage();
+            msg.SqlStatement = @"select a.recept_no, b.ptnt_nm, a.clinic_ymd, a.clinic_time, a.symp_txt 
+                                 from h1opdin_test a, hz_mst_ptnt_test b
+                                 where a.ptnt_no = b.ptnt_no order by a.recept_no;";
+
+            dt = this.FillDataSet(msg).Tables[0];
+            grdReceipt.FillData(dt);
         }
 
         private void Clear()
