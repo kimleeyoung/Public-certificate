@@ -12,6 +12,7 @@ using Mcc.Series.Common.Enum;
 using Mcc.Series.DataBase;
 using Mcc.Series.Controls;
 using Mcc.Series.Ui.PopUp;
+using Infragistics.Win.UltraWinGrid;
 
 namespace Mcc.Clinic.Common.TEST
 {
@@ -120,6 +121,7 @@ namespace Mcc.Clinic.Common.TEST
                 {
                     UpdateData();
                     GetPtntData();
+                    GetOrderData();
                     Clear();
                 }
                 else
@@ -152,6 +154,7 @@ namespace Mcc.Clinic.Common.TEST
             {
                 DeleteData();
                 GetPtntData();
+                GetOrderData();
                 Clear();
             }                
         }
@@ -164,16 +167,16 @@ namespace Mcc.Clinic.Common.TEST
                 {
                     DBMessage msg = new DBMessage();
                     msg.SqlStatement = @"INSERT INTO public.h1opdin_test (recept_no, ptnt_no, clinic_ymd, clinic_time)
-                                     VALUES((select ifnull(max(recept_no::integer) + 1, 1) from h1opdin_test)
-                                     , @ptnt_no, to_char(now(), 'yyyyMMDD'), to_char(now(), 'HH24:MI')); ";
+                                         VALUES((select ifnull(max(recept_no::integer) + 1, 1) from h1opdin_test),
+                                         @ptnt_no, to_char(now(), 'yyyyMMDD'), to_char(now(), 'HH24:MI')); ";
                     msg.AddParameter("ptnt_no", grdPtnt.ActiveRow.Cells["ptnt_no"].Value.ToString());
+                    
                     this.ExecuteNonQuery(msg);
 
                     GetOrderData();
                 }
                 MessageBox.Show("접수되었습니다");
-            }      
-                           
+            }         
         }
 
         private void IcnClear_Click(object sender, EventArgs e)
@@ -235,7 +238,7 @@ namespace Mcc.Clinic.Common.TEST
         }
 
         private void UpdateData()
-        {
+        {        
             DBMessage msg = new DBMessage();
             msg.SqlStatement = @"UPDATE public.hz_mst_ptnt_test
                                  SET ptnt_nm = @ptnt_nm, addr = @addr, att_dept = @att_dept
@@ -245,7 +248,7 @@ namespace Mcc.Clinic.Common.TEST
             msg.AddParameter("ptnt_nm", txtPtntNm.Text);
             msg.AddParameter("addr", txtPtntAddr.Text);
             msg.AddParameter("att_dept", cbxPtntDept.SelectedValue.ToString());
-            
+
             this.ExecuteNonQuery(msg);
         }
 
@@ -267,11 +270,21 @@ namespace Mcc.Clinic.Common.TEST
 
         private void DeleteData()
         {
+            #region 환자등록 삭제
             DBMessage msg = new DBMessage();
             msg.SqlStatement = $@"DELETE FROM public.hz_mst_ptnt_test WHERE ptnt_no = @ptnt_no";
             msg.AddParameter("ptnt_no", txtPtntNo.Text);
 
             this.ExecuteNonQuery(msg);
+            #endregion
+
+            #region 환자접수 삭제
+            DBMessage smsg = new DBMessage();
+            smsg.SqlStatement = $@"DELETE from public.h1opdin_test WHERE ptnt_no = @ptnt_no";
+            smsg.AddParameter("ptnt_no", grdPtnt.ActiveRow.Cells["ptnt_no"].Value.ToString());
+
+            this.ExecuteNonQuery(smsg);
+            #endregion
         }
 
         private void GetPtntData()
@@ -283,8 +296,7 @@ namespace Mcc.Clinic.Common.TEST
                                  where a.att_dept = b.dept_cd order by a.ptnt_no;";
 
             dt = this.FillDataSet(msg).Tables[0];             
-            grdPtnt.FillData(dt);
-            
+            grdPtnt.FillData(dt);            
         }
 
         private void GetOrderData()
@@ -293,7 +305,8 @@ namespace Mcc.Clinic.Common.TEST
             DBMessage msg = new DBMessage();
             msg.SqlStatement = @"select a.recept_no, b.ptnt_nm, a.clinic_ymd, a.clinic_time, a.symp_txt 
                                  from h1opdin_test a, hz_mst_ptnt_test b
-                                 where a.ptnt_no = b.ptnt_no order by a.recept_no;";
+                                 where a.ptnt_no = b.ptnt_no   
+                                 order by cast(a.recept_no as int);";
 
             dt = this.FillDataSet(msg).Tables[0];
             grdReceipt.FillData(dt);
