@@ -58,13 +58,12 @@
             this.grdOrder = new Mcc.Series.Controls.MccGrid();
             this.btnSave = new System.Windows.Forms.Button();
             this.grdReceipt = new Mcc.Series.Controls.MccGrid();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnClear = new System.Windows.Forms.Button();
             this.txtSymp = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnClear = new System.Windows.Forms.Button();
             this.pnlbasetop.SuspendLayout();
             this.pnlbasemain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxbasetitle)).BeginInit();
@@ -136,9 +135,9 @@
             this.lblPtntInfo.Location = new System.Drawing.Point(8, 154);
             this.lblPtntInfo.Margin = new System.Windows.Forms.Padding(1);
             this.lblPtntInfo.Name = "lblPtntInfo";
-            this.lblPtntInfo.Size = new System.Drawing.Size(65, 12);
+            this.lblPtntInfo.Size = new System.Drawing.Size(59, 12);
             this.lblPtntInfo.TabIndex = 1;
-            this.lblPtntInfo.Text = "환자정보: ";
+            this.lblPtntInfo.Text = "선택환자:";
             // 
             // grdOrder
             // 
@@ -205,7 +204,7 @@
             this.grdOrder.DoNotAutomaticallyUpdate = false;
             this.grdOrder.ExceptCellChangeEventColumns = new string[0];
             this.grdOrder.Location = new System.Drawing.Point(10, 293);
-            this.grdOrder.MccLastLayoutMemory = true;
+            this.grdOrder.MccLastLayoutMemory = false;
             this.grdOrder.MccNonHeaderLineColor = false;
             this.grdOrder.Name = "grdOrder";
             this.grdOrder.Size = new System.Drawing.Size(468, 91);
@@ -216,9 +215,9 @@
             // btnSave
             // 
             this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSave.Location = new System.Drawing.Point(195, 3);
+            this.btnSave.Location = new System.Drawing.Point(148, 3);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(92, 30);
+            this.btnSave.Size = new System.Drawing.Size(139, 30);
             this.btnSave.TabIndex = 8;
             this.btnSave.Text = "저장";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -296,25 +295,13 @@
             this.grdReceipt.Text = "mccGrid1";
             this.grdReceipt.UpdateMode = Infragistics.Win.UltraWinGrid.UpdateMode.OnCellChange;
             // 
-            // btnAdd
-            // 
-            this.btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnAdd.Location = new System.Drawing.Point(3, 3);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(90, 30);
-            this.btnAdd.TabIndex = 10;
-            this.btnAdd.Text = "추가";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.Controls.Add(this.btnClear, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnSave, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnAdd, 0, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(188, 391);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -322,6 +309,16 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(290, 36);
             this.tableLayoutPanel2.TabIndex = 10;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnClear.Location = new System.Drawing.Point(3, 3);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(139, 30);
+            this.btnClear.TabIndex = 11;
+            this.btnClear.Text = "지우기";
+            this.btnClear.UseVisualStyleBackColor = true;
             // 
             // txtSymp
             // 
@@ -364,16 +361,6 @@
             this.label3.TabIndex = 13;
             this.label3.Text = "처방";
             // 
-            // btnClear
-            // 
-            this.btnClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnClear.Location = new System.Drawing.Point(99, 3);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(90, 30);
-            this.btnClear.TabIndex = 11;
-            this.btnClear.Text = "지우기";
-            this.btnClear.UseVisualStyleBackColor = true;
-            // 
             // test06
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -400,7 +387,6 @@
         private Series.Controls.MccGrid grdReceipt;
         private System.Windows.Forms.Button btnSave;
         private Series.Controls.MccGrid grdOrder;
-        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;

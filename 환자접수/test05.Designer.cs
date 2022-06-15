@@ -201,7 +201,7 @@
             this.cbxPtntDept.Margin = new System.Windows.Forms.Padding(1);
             this.cbxPtntDept.Name = "cbxPtntDept";
             this.cbxPtntDept.Size = new System.Drawing.Size(185, 20);
-            this.cbxPtntDept.TabIndex = 6;
+            this.cbxPtntDept.TabIndex = 3;
             // 
             // grdPtnt
             // 
@@ -309,7 +309,7 @@
             this.txtPtntAddr.Margin = new System.Windows.Forms.Padding(0);
             this.txtPtntAddr.Name = "txtPtntAddr";
             this.txtPtntAddr.Size = new System.Drawing.Size(187, 20);
-            this.txtPtntAddr.TabIndex = 10;
+            this.txtPtntAddr.TabIndex = 2;
             // 
             // txtPtntNm
             // 
@@ -318,7 +318,7 @@
             this.txtPtntNm.Location = new System.Drawing.Point(61, 27);
             this.txtPtntNm.Name = "txtPtntNm";
             this.txtPtntNm.Size = new System.Drawing.Size(181, 14);
-            this.txtPtntNm.TabIndex = 7;
+            this.txtPtntNm.TabIndex = 1;
             // 
             // txtPtntNo
             // 
@@ -327,7 +327,7 @@
             this.txtPtntNo.Location = new System.Drawing.Point(61, 4);
             this.txtPtntNo.Name = "txtPtntNo";
             this.txtPtntNo.Size = new System.Drawing.Size(181, 14);
-            this.txtPtntNo.TabIndex = 11;
+            this.txtPtntNo.TabIndex = 0;
             // 
             // tableLayoutPanel2
             // 
@@ -387,7 +387,7 @@
             this.btnSave.Location = new System.Drawing.Point(3, 3);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(71, 22);
-            this.btnSave.TabIndex = 0;
+            this.btnSave.TabIndex = 4;
             this.btnSave.Text = "저장";
             this.btnSave.UseVisualStyleBackColor = true;
             // 
@@ -397,7 +397,7 @@
             this.btnDelete.Location = new System.Drawing.Point(80, 3);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(71, 22);
-            this.btnDelete.TabIndex = 0;
+            this.btnDelete.TabIndex = 5;
             this.btnDelete.Text = "삭제";
             this.btnDelete.UseVisualStyleBackColor = true;
             // 
@@ -407,7 +407,7 @@
             this.btnReceipt.Location = new System.Drawing.Point(157, 3);
             this.btnReceipt.Name = "btnReceipt";
             this.btnReceipt.Size = new System.Drawing.Size(71, 22);
-            this.btnReceipt.TabIndex = 1;
+            this.btnReceipt.TabIndex = 6;
             this.btnReceipt.Text = "접수";
             this.btnReceipt.UseVisualStyleBackColor = true;
             // 
