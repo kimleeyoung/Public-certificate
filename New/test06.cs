@@ -36,10 +36,11 @@ namespace Mcc.Clinic.Common.TEST
             this.Load += new EventHandler(test06_Load);
             this.FormClosing += new FormClosingEventHandler(test06_FormClosing);
 
-            this.grdReceipt.DoubleClickRow += GrdReceipt_DoubleClickRow;       //환자접수 리스트 더블클릭     
-            this.btnSave.Click += BtnSave_Click;                               //처방내용 저장           
-            this.btnClear.Click += BtnClear_Click;                             //처방내용 지우기  
-            this.grdOrder.InitializeTemplateAddRow += GrdOrder_InitializeTemplateAddRow;
+            this.btnClear.Click += BtnClear_Click;                                          //처방내용 지우기
+            this.btnSave.Click += BtnSave_Click;                                            //처방내용 저장                         
+            this.grdOrder.KeyPress += GrdOrder_KeyPress;                                    //투여,횟수,일수 숫자만 입력  
+            this.grdReceipt.DoubleClickRow += GrdReceipt_DoubleClickRow;                    //환자접수 리스트 더블클릭    
+            this.grdOrder.InitializeTemplateAddRow += GrdOrder_InitializeTemplateAddRow;    //새로운 로우 추가될때                      
         }
         #endregion
 
@@ -91,65 +92,30 @@ namespace Mcc.Clinic.Common.TEST
             #endregion
 
             #region 환자처방 리스트
-            grdOrder.AddColumn("recept_no", "접수번호", 40, GridColumnStyle.Default, HiddenType.True, ReadOnlyType.NoEdit, GridMaskStyle.None);
-            grdOrder.AddColumn("user_cd", "코드", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
-            grdOrder.AddColumn("user_nm", "코드명", 80, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
-            grdOrder.AddColumn("qty", "투여", 40, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
-            grdOrder.AddColumn("divide", "횟수", 40, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
-            grdOrder.AddColumn("day", "일수", 60, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("recept_no", "접수번호", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.NoEdit, GridMaskStyle.None);
+            grdOrder.AddColumn("user_cd", "코드", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("user_nm", "코드명", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("qty", "투여", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("divide", "횟수", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
+            grdOrder.AddColumn("day", "일수", 50, GridColumnStyle.Default, HiddenType.False, ReadOnlyType.False, GridMaskStyle.None);
             grdOrder.SetGridHeader();
 
             grdOrder.DisplayLayout.AutoFitStyle = Infragistics.Win.UltraWinGrid.AutoFitStyle.ResizeAllColumns;
-            grdOrder.DisplayLayout.Override.AllowAddNew = AllowAddNew.TemplateOnBottom;            
+            grdOrder.DisplayLayout.Override.AllowAddNew = AllowAddNew.TemplateOnBottom;
 
-            //this.grdOrder.DisplayLayout.Bands[0].Columns["user_cd"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.Edit;
-            this.grdOrder.SetColumnAlign(new string[] { "user_cd" }, HAlignStyle.Center, VAlignStyle.Middle);
-
-            //this.grdOrder.DisplayLayout.Bands[0].Columns["user_nm"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.Edit;
-            this.grdOrder.SetColumnAlign(new string[] { "user_nm" }, HAlignStyle.Center, VAlignStyle.Middle);
-
-            //this.grdOrder.DisplayLayout.Bands[0].Columns["qty"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.Edit;
-            this.grdOrder.SetColumnAlign(new string[] { "qty" }, HAlignStyle.Center, VAlignStyle.Middle);
-
-            //this.grdOrder.DisplayLayout.Bands[0].Columns["divide"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.Edit;
-            this.grdOrder.SetColumnAlign(new string[] { "divide" }, HAlignStyle.Center, VAlignStyle.Middle);
-
-            //this.grdOrder.DisplayLayout.Bands[0].Columns["day"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.Edit;
+            this.grdOrder.SetColumnAlign(new string[] { "recept_no" }, HAlignStyle.Center, VAlignStyle.Middle);
+            this.grdOrder.SetColumnAlign(new string[] { "user_cd" }, HAlignStyle.Center, VAlignStyle.Middle);            
+            this.grdOrder.SetColumnAlign(new string[] { "user_nm" }, HAlignStyle.Center, VAlignStyle.Middle);          
+            this.grdOrder.SetColumnAlign(new string[] { "qty" }, HAlignStyle.Center, VAlignStyle.Middle);            
+            this.grdOrder.SetColumnAlign(new string[] { "divide" }, HAlignStyle.Center, VAlignStyle.Middle);          
             this.grdOrder.SetColumnAlign(new string[] { "day" }, HAlignStyle.Center, VAlignStyle.Middle);
             #endregion
         }
         #endregion
 
-        #region Events
-        private void GrdReceipt_DoubleClickRow(object sender, Infragistics.Win.UltraWinGrid.DoubleClickRowEventArgs e)
-        {          
-            if (grdOrder.ActiveRow != null)
-            {
-                if (grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString() != grdOrder.ActiveRow.Cells["recept_no"].Value.ToString())
-                {
-                    MessageBox.Show("현재 처방을 저장하신 후 다음 환자를 클릭해주세요!", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(e.Row.Cells["recept_no"].Text))
-            {
-                lblPtntInfo.Text = "선택환자: 접수번호-" + grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString()
-                    + " / 환자명-" + grdReceipt.ActiveRow.Cells["ptnt_nm"].Value.ToString();
-
-                UltraGridRow uRow = this.grdOrder.AddRow();
-                uRow.Cells["recept_no"].Value = grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString();
-                uRow.Update();
-            }            
-        }
-        private void GrdOrder_InitializeTemplateAddRow(object sender, InitializeTemplateAddRowEventArgs e)
-        {
-            e.TemplateAddRow.Cells["recept_no"].Value = grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString();
-        }
-
+        #region Events       
         private void BtnClear_Click(object sender, EventArgs e)
-        {
-            
+        {            
             if(grdOrder.ActiveRow != null)
             {
                 if (MessageBox.Show("선택한 데이터를 삭제하시겠습니까?", "삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -182,54 +148,124 @@ namespace Mcc.Clinic.Common.TEST
             }
             else
             {
-                foreach (UltraGridRow row in grdOrder.Rows)
+                foreach(UltraGridRow row in grdOrder.Rows)
                 {
-                    if (!string.IsNullOrEmpty(row.Cells["user_cd"].Value.ToString()))
+                    //처방 그리드에서 입력 안 된 부분 찾기
+                    if (row.RowSelectorAppearance.BackColor == Mcc.Series.Controls.Config.Grid_Insert_RowHeaderColor ||
+                       row.RowSelectorAppearance.BackColor == Mcc.Series.Controls.Config.Grid_Update_RowHeaderColor)
                     {
-                        DBMessage dmsg = new DBMessage();
-                        dmsg.SqlStatement = @"select * from h2opd_doct_ord_test order by recept_no;";
-                        DataTable dt = this.FillDataSet(dmsg).Tables[0];
-
-                        //접수번호 같은환자 같은처방 방지
-                        foreach (DataRow dr in dt.Rows)
+                        if (row.Cells["user_cd"].Value.ToString().Trim().Equals(""))
                         {
-                            if (dr["recept_no"].ToString().Equals(row.Cells["recept_no"].Value.ToString()) && dr["user_cd"].ToString().Equals(row.Cells["user_cd"].Value.ToString()))
-                            {
-                                MessageBox.Show("이미 내려진 처방입니다. 다시 확인해주세요", "확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                return;
-                            }
+                            MessageBox.Show("처방코드를 입력하세요", "처방내역");
+                            row.Cells["user_cd"].Activate();
+                            return;
                         }
+                        else if (row.Cells["user_nm"].Value.ToString().Trim().Equals(""))
+                        {
+                            MessageBox.Show("처방명을 입력하세요", "처방내역");
+                            row.Cells["user_nm"].Activate();
+                            return;
+                        }
+                        else if (row.Cells["qty"].Value.ToString().Trim().Equals(""))
+                        {
+                            MessageBox.Show("투여란을 입력하세요", "처방내역");
+                            row.Cells["qty"].Activate();
+                            return;
+                        }
+                        else if (row.Cells["divide"].Value.ToString().Trim().Equals(""))
+                        {
+                            MessageBox.Show("횟수란을 입력하세요", "처방내역");
+                            row.Cells["divide"].Activate();
+                            return;
+                        }
+                        else if (row.Cells["day"].Value.ToString().Trim().Equals(""))
+                        {
+                            MessageBox.Show("일수란을 입력하세요", "처방내역");
+                            row.Cells["day"].Activate();
+                            return;
+                        }                       
+                    }          
+                                        
+                     DBMessage dmsg = new DBMessage();
+                     dmsg.SqlStatement = @"select * from h2opd_doct_ord_test order by recept_no;";
+                     DataTable dt = this.FillDataSet(dmsg).Tables[0];
 
-                        //처방내린 것 서버에 저장
-                        DBMessage smsg = new DBMessage();
-                        smsg.SqlStatement = @"INSERT INTO public.h2opd_doct_ord_test
-                                          (recept_no, user_cd, user_nm, qty, divide, day)
-                                          VALUES(@recept_no, @user_cd, @user_nm, @qty, @divide, @day);";
+                     //접수번호 같은환자 같은처방 방지
+                     foreach (DataRow dr in dt.Rows)
+                     {
+                         if (dr["recept_no"].ToString().Equals(row.Cells["recept_no"].Value.ToString()) && dr["user_cd"].ToString().Equals(row.Cells["user_cd"].Value.ToString()))
+                         {
+                             MessageBox.Show("이미 내려진 처방입니다. 다시 확인해주세요", "확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                             return;
+                         }
+                     }
 
-                        smsg.AddParameter("recept_no", row.Cells["recept_no"].Value.ToString());
-                        smsg.AddParameter("user_cd", row.Cells["user_cd"].Value.ToString());
-                        smsg.AddParameter("user_nm", row.Cells["user_nm"].Value.ToString());
-                        smsg.AddParameter("qty", row.Cells["qty"].Value.ToString());
-                        smsg.AddParameter("divide", row.Cells["divide"].Value.ToString());
-                        smsg.AddParameter("day", row.Cells["day"].Value.ToString());
-                        this.ExecuteNonQuery(smsg);
+                     //처방내린 것 서버에 저장
+                     DBMessage smsg = new DBMessage();
+                     smsg.SqlStatement = @"INSERT INTO public.h2opd_doct_ord_test
+                                       (recept_no, user_cd, user_nm, qty, divide, day)
+                                       VALUES(@recept_no, @user_cd, @user_nm, @qty, @divide, @day);";
 
-                        //증상 서버에 추가
-                        DBMessage msg = new DBMessage();
-                        msg.SqlStatement = @"UPDATE public.h1opdin_test SET symp_txt=@symp_txt WHERE recept_no=@recept_no;";
-                        msg.AddParameter("symp_txt", txtSymp.Text);
-                        msg.AddParameter("recept_no", grdOrder.ActiveRow.Cells["recept_no"].Value.ToString());
-                        this.ExecuteNonQuery(msg);
-                    }
-                    else
-                    {                                                                        
-                    }                    
+                     smsg.AddParameter("recept_no", row.Cells["recept_no"].Value.ToString());
+                     smsg.AddParameter("user_cd", row.Cells["user_cd"].Value.ToString());
+                     smsg.AddParameter("user_nm", row.Cells["user_nm"].Value.ToString());
+                     smsg.AddParameter("qty", row.Cells["qty"].Value.ToString());
+                     smsg.AddParameter("divide", row.Cells["divide"].Value.ToString());
+                     smsg.AddParameter("day", row.Cells["day"].Value.ToString());
+                     
+                     this.ExecuteNonQuery(smsg, DataBaseName.MccDB);
+
+                     //증상 서버에 추가
+                     DBMessage msg = new DBMessage();
+                     msg.SqlStatement = @"UPDATE public.h1opdin_test SET symp_txt=@symp_txt WHERE recept_no=@recept_no;";
+                     msg.AddParameter("symp_txt", txtSymp.Text);
+                     msg.AddParameter("recept_no", grdOrder.ActiveRow.Cells["recept_no"].Value.ToString());
+                     this.ExecuteNonQuery(msg);                                        
                 }
                 MessageBox.Show("저장이 완료되었습니다.");
                 grdOrder.RowsClearAll();
                 txtSymp.Text = "";
                 lblPtntInfo.Text = "선택환자:";
             }
+        }
+
+        private void GrdOrder_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string colName = grdOrder.ActiveCell.Column.ToString();
+            if (colName == "qty" || colName == "divide" || colName == "day")
+            {
+                if (!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void GrdReceipt_DoubleClickRow(object sender, Infragistics.Win.UltraWinGrid.DoubleClickRowEventArgs e)
+        {
+            if (grdOrder.ActiveRow != null)
+            {
+                if (grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString() != grdOrder.ActiveRow.Cells["recept_no"].Value.ToString())
+                {
+                    MessageBox.Show("현재 처방을 저장하신 후 다음 환자를 클릭해주세요!", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(e.Row.Cells["recept_no"].Text))
+            {
+                lblPtntInfo.Text = "선택환자: 접수번호-" + grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString()
+                    + " / 환자명-" + grdReceipt.ActiveRow.Cells["ptnt_nm"].Value.ToString();
+
+                UltraGridRow uRow = this.grdOrder.AddRow();
+                uRow.Cells["recept_no"].Value = grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString();
+                uRow.Update();
+            }
+        }
+
+        private void GrdOrder_InitializeTemplateAddRow(object sender, InitializeTemplateAddRowEventArgs e)
+        {
+            e.TemplateAddRow.Cells["recept_no"].Value = grdReceipt.ActiveRow.Cells["recept_no"].Value.ToString();
         }
         #endregion
 

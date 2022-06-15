@@ -204,7 +204,7 @@
             this.grdOrder.DoNotAutomaticallyUpdate = false;
             this.grdOrder.ExceptCellChangeEventColumns = new string[0];
             this.grdOrder.Location = new System.Drawing.Point(10, 293);
-            this.grdOrder.MccLastLayoutMemory = true;
+            this.grdOrder.MccLastLayoutMemory = false;
             this.grdOrder.MccNonHeaderLineColor = false;
             this.grdOrder.Name = "grdOrder";
             this.grdOrder.Size = new System.Drawing.Size(468, 91);
