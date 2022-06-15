@@ -27,6 +27,10 @@
 
 ![image](https://user-images.githubusercontent.com/65011438/170907715-6975da3f-4b69-46cc-b74b-e42d618be4af.png)
 
+# 환자등록
+- 그리드 로우 자동 추가 기능
+- grdOrder 투여, 횟수, 일수 숫자만 입력 가능
+
 
 # test05
 ![image](https://user-images.githubusercontent.com/65011438/172575853-0497da4d-dc4b-4460-9335-7b5dad2a30d6.png)
@@ -38,5 +42,8 @@
 ![image](https://user-images.githubusercontent.com/65011438/172577084-a876554c-e59a-4c3a-8da9-e2f7383b4ccf.png)
 
 ![image](https://user-images.githubusercontent.com/65011438/173291813-009dacf9-56bf-4548-a23c-d7936dd44168.png)
+
+![image](https://user-images.githubusercontent.com/65011438/173786012-c7ff2eed-2bfd-42f0-97a6-92762ba69478.png)
+
 
 
